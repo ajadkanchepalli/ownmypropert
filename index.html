@@ -64,9 +64,9 @@
     /* Light Frosted Glassmorphism */
     .glass-nav {
       background: rgba(250, 248, 245, 0.82);
-      backdrop-filter: blur(20px);
+      backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(20px);
-      border-bottom: 1px solid rgba(231, 226, 218, 0.8);
+      border-bottom: 0px solid rgba(231, 226, 218, 0.8);
     }
 
     .glass-card {
@@ -156,7 +156,7 @@
     .hero-visual-dimmer {
       position: absolute;
       inset: 0;
-      background: rgba(18, 21, 26, 0.55); /* Dark scrim to make white text pop */
+      background: rgba(0, 0, 0, 0); /* Dark scrim to make white text pop */
       backdrop-filter: blur(3px);
       transition: opacity 0.4s ease;
       pointer-events: none;
@@ -475,44 +475,51 @@
   <div class="ambient-glow-2"></div>
 
   <!-- ================= TOP NAVIGATION (STRICTLY 3 NAV LINKS) ================= -->
-  <header class="fixed top-0 left-0 right-0 z-50 glass-nav transition-all duration-300">
+  <header class="fixed top-0 left-0 right-0 z-40 bg-transparent backdrop-blur-md transition-all duration-500">
     <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
       
-      <!-- Brand Logo SVG -->
+      <!-- Brand Logo & Identity -->
       <a href="javascript:switchTab('home')" class="flex items-center gap-3.5 group">
-        <img src="https://scontent.cdninstagram.com/v/t51.82787-19/802333309_18113565055820501_4586330556296927883_n.jpg?stp=dst-jpg_s150x150_tt6&_nc_cat=110&ccb=7-5&_nc_sid=f7ccc5&efg=eyJ2ZW5jb2RlX3RhZyI6InByb2ZpbGVfcGljLnd3dy4xMDgwLkMzIn0%3D&_nc_ohc=z9IUbsAmhRgQ7kNvwG5YGJd&_nc_oc=AdpxJuD8ciXu3q0ATT1TecsuVPHK82bV_qxJ6ONpbjy1qq8uMG20mRlpF9PzMtUhHl2YUm1dzIj7AT28Akj9uwxc&_nc_zt=24&_nc_ht=scontent.cdninstagram.com&_nc_gid=qvdPfIeaQETgah3fZAkyPQ&_nc_ss=7b689&oh=00_AQLUs83yN1lcvIvvANXHzvcP8siTsuiC--KIUPaqC1tQzQ&oe=6AB5C5D7" alt="Own My ProperT Logo" class="h-16 w-16 object-contain transform group-hover:scale-105 transition-transform duration-300">
-          <path d="M50 8L15 38H28V72H72V38H85L50 8Z" stroke="#0F52BA" stroke-width="4.5" stroke-linejoin="round"/>
-          <path d="M50 20L28 40H38V64H62V40H72L50 20Z" stroke="#16A34A" stroke-width="3.5" stroke-linejoin="round"/>
-          <path d="M42 42H58V58H42Z" fill="#0F52BA"/>
-          <!-- Integrated Bottom Key Base -->
-          <circle cx="28" cy="84" r="8" stroke="#0F52BA" stroke-width="4"/>
-          <path d="M36 84H76L82 78V84L86 80V84H90" stroke="#0F52BA" stroke-width="4" stroke-linecap="round"/>
-          <path d="M64 42L72 34V46" stroke="#16A34A" stroke-width="3" stroke-linecap="round"/>
-        </svg>
-        <div class="leading-tight">
-          <span class="block font-italiana font-bold text-xl tracking-wider text-textDark">Own My ProperT</span>
-          <span class="text-[9px] tracking-[0.25em] text-brandBlue uppercase font-bold">Spatial Concierge</span>
+        <!-- Logo image with subtle rounded corners -->
+        <div class="h-12 w-12 rounded-2xl overflow-hidden bg-white/80  shadow-sm flex items-center justify-center transform group-hover:scale-105 transition-transform duration-300">
+          <img 
+            src="https://scontent.cdninstagram.com/v/t51.82787-19/802333309_18113565055820501_4586330556296927883_n.jpg?stp=dst-jpg_s150x150_tt6&_nc_cat=110&ccb=7-5&_nc_sid=f7ccc5&efg=eyJ2ZW5jb2RlX3RhZyI6InByb2ZpbGVfcGljLnd3dy4xMDgwLkMzIn0%3D&_nc_ohc=z9IUbsAmhRgQ7kNvwG5YGJd&_nc_oc=AdpxJuD8ciXu3q0ATT1TecsuVPHK82bV_qxJ6ONpbjy1qq8uMG20mRlpF9PzMtUhHl2YUm1dzIj7AT28Akj9uwxc&_nc_zt=24&_nc_ht=scontent.cdninstagram.com&_nc_gid=qvdPfIeaQETgah3fZAkyPQ&_nc_ss=7b689&oh=00_AQLUs83yN1lcvIvvANXHzvcP8siTsuiC--KIUPaqC1tQzQ&oe=6AB5C5D7" 
+            alt="Own My ProperT Logo" 
+            class="h-full w-full object-contain rounded-xl"
+          >
+        </div>
+
+        <div class="leading-tight flex flex-col items-start gap-1">
+          <!-- Title in Brand Blue -->
+          <span class="block font-bold text-xl tracking-tight text-brandBlue">Own My ProperT</span>
+          
+          <!-- Spatial Concierge in White Curved Capsule Badge -->
+          <span class="inline-flex items-center text-[9px] tracking-[0.16em] uppercase font-bold text-white bg-brandBlue px-2.5 py-0.5 rounded-full border border-stoneBorder shadow-sm">
+            Spatial Concierge
+          </span>
         </div>
       </a>
 
-      <!-- EXACTLY 3 NAV LINKS (HOME, PROPERTIES) -->
-      <!-- CLEAN 2-ITEM NAVIGATION ONLY -->
-      <nav class="hidden md:flex items-center gap-1.5 bg-[#EFECE6] p-1.5 rounded-full border border-stoneBorder">
-        <button id="nav-home" onclick="switchTab('home')" class="nav-btn px-6 py-2 rounded-full text-xs font-bold uppercase tracking-widest text-white bg-textDark shadow-md transition-all">Home</button>
-        <button id="nav-properties" onclick="switchTab('properties')" class="nav-btn px-6 py-2 rounded-full text-xs font-bold uppercase tracking-widest text-textMuted hover:text-textDark transition-all">Properties</button>
+      <!-- Center Nav Links: Home & Properties -->
+      <nav class="hidden md:flex items-center gap-1.5 bg-[#EFECE6]/80 backdrop-blur-md p-1.5 rounded-full border border-stoneBorder shadow-sm">
+        <button id="nav-home" onclick="switchTab('home')" class="nav-btn px-6 py-2 rounded-full text-xs font-bold uppercase tracking-widest text-white bg-textDark shadow-md transition-all duration-300">Home</button>
+        <button id="nav-properties" onclick="switchTab('properties')" class="nav-btn px-6 py-2 rounded-full text-xs font-bold uppercase tracking-widest text-textMuted hover:text-textDark transition-all duration-300">Properties</button>
       </nav>
 
-      <!-- Action Buttons -->
+      <!-- Right Actions: Sell Your Property & Property Hunt -->
       <div class="flex items-center gap-3">
-        <button onclick="openSellModal()" class="text-xs font-bold uppercase px-4 py-2.5 rounded-full border border-stoneBorder bg-white hover:border-brandGreen hover:text-brandGreen text-textDark transition-all shadow-sm flex items-center gap-1.5">
+        <button onclick="openSellModal ? openSellModal() : openHuntModal()" class="inline-flex items-center gap-2 bg-white hover:bg-stoneWarm text-textDark border border-stoneBorder text-xs font-bold tracking-wider uppercase px-5 py-2.5 rounded-full transition-all duration-300 shadow-sm hover:border-brandGreen hover:text-brandGreen transform hover:scale-[1.02]">
           <i data-lucide="tag" class="w-3.5 h-3.5 text-brandGreen"></i>
-          Sell Your Property
+          <span>Sell Your Property</span>
         </button>
-        <button onclick="openHuntModal()" class="hidden sm:inline-flex items-center gap-2 bg-brandBlue hover:bg-blue-700 text-white text-xs font-bold tracking-wider uppercase px-5 py-2.5 rounded-full transition-all shadow-sm hover:shadow-brandBlue/20 transform hover:scale-[1.02]">
+
+        <button onclick="openHuntModal()" class="inline-flex items-center gap-2 bg-brandBlue hover:bg-blue-700 text-white text-xs font-bold tracking-wider uppercase px-5 py-2.5 rounded-full transition-all duration-300 shadow-md shadow-brandBlue/20 transform hover:scale-[1.02]">
           <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
-          Property Hunt
+          <span>Property Hunt</span>
         </button>
       </div>
+
+    </div>
   </header>
 
   
@@ -1742,6 +1749,7 @@ async function handleSellFormSubmit(e) {
       onScrollUpdate();
     })();
   </script>
+  
   <!-- Portfolio Motion Engine -->
   <script>
     (function () {
