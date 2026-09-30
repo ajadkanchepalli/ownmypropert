@@ -1,0 +1,1823 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title> Own My ProperT — Spatial Concierge & Property Portal</title>
+  
+ <!-- Tailwind CSS & Lucide Icons CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Supabase JS Client for Realtime Database -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <!-- GSAP & ScrollTrigger (Cinematic Sequencing Engine) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <!-- Premium Editorial Typography -->
+ <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Google+Sans:ital,opsz,wght@0,17..18,400..700;1,17..18,400..700&family=Outfit:wght@100..900&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            italiana: ['Italiana', 'serif'],
+            playfair: ['Playfair Display', 'serif'],
+            jakarta: ['Plus Jakarta Sans', 'sans-serif'],
+          },
+          colors: {
+            brandBlue: '#0F52BA',
+            brandGreen: '#16A34A',
+            stoneWarm: '#FAF8F5',
+            stoneCard: '#FFFFFF',
+            stoneBorder: '#E7E2DA',
+            textDark: '#12151A',
+            textMuted: '#6B7280'
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      background-color: #FAF8F5;
+      color: #12151A;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      overflow-x: hidden;
+    }
+    
+    /* 3D Perspective Card Tilt Engine */
+    .perspective-container {
+      perspective: 1400px;
+    }
+
+    .tilt-card {
+      transition: transform 0.22s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.3s ease, border-color 0.3s ease;
+      transform-style: preserve-3d;
+      will-change: transform;
+    }
+
+    /* Light Frosted Glassmorphism */
+    .glass-nav {
+      background: rgba(250, 248, 245, 0.82);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(231, 226, 218, 0.8);
+    }
+
+    .glass-card {
+      background: #FFFFFF;
+      border: 1px solid #E7E2DA;
+      box-shadow: 0 4px 20px -2px rgba(18, 21, 26, 0.04);
+    }
+
+    .glass-card:hover {
+      border-color: #CBD5E1;
+      box-shadow: 0 24px 45px -12px rgba(15, 82, 186, 0.09);
+    }
+
+    /* Subtle Architectural Light Glows */
+    .ambient-glow-1 {
+      position: absolute;
+      top: 0;
+      left: 20%;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(15, 82, 186, 0.04) 0%, rgba(250, 248, 245, 0) 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .ambient-glow-2 {
+      position: absolute;
+      top: 30%;
+      right: 5%;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(22, 163, 74, 0.04) 0%, rgba(250, 248, 245, 0) 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #FAF8F5;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #D1D5DB;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #0F52BA;
+    }
+   /* ================= SEAMLESS HERO SPLIT WITH DIRECT OVERLAY ================= */
+    .reveal-hero-section {
+      height: 280vh; /* Smooth scroll runway */
+      position: relative;
+    }
+    
+    .reveal-sticky-box {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      width: 100%;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #FAF8F5;
+    }
+
+    /* Background Image Container */
+    .hero-bg-visual {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      overflow: hidden;
+    }
+
+    .hero-bg-visual img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transform: scale(1.06);
+      transition: filter 0.4s ease, opacity 0.4s ease;
+      will-change: opacity, transform;
+    }
+
+    /* Exactly 30% transparent white scrim over background */
+    .hero-visual-dimmer {
+      position: absolute;
+      inset: 0;
+      background: rgba(18, 21, 26, 0.55); /* Dark scrim to make white text pop */
+      backdrop-filter: blur(3px);
+      transition: opacity 0.4s ease;
+      pointer-events: none;
+    }
+
+    /* Left & Right Sliding White Panels */
+   /* Semi-transparent frosted stone curtain doors showing background image */
+    .split-curtain-door {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 50.05vw;
+      background: rgba(250, 248, 245, 0.72); /* 72% light stone tint so the image shows through clearly */
+      backdrop-filter: blur(14px); /* Luxurious frosted glass blur */
+      -webkit-backdrop-filter: blur(14px);
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      will-change: transform, opacity;
+      user-select: none;
+      transition: background-color 0.3s ease;
+    }
+
+    .door-left {
+      left: 0;
+      justify-content: flex-end;
+    }
+
+    .door-right {
+      right: 0;
+      justify-content: flex-start;
+    }
+
+    /* Typography on First Screen */
+    .split-word-left, .split-word-right {
+      font-family: 'Italiana', serif;
+      font-size: clamp(3.2rem, 9.5vw, 10.5rem);
+      font-weight: 800;
+      color: #0F52BA;
+      letter-spacing: -0.03em;
+      line-height: 1;
+      white-space: nowrap;
+      text-shadow: 0 4px 20px rgba(255, 255, 255, 0.8), 0 2px 8px rgba(15, 82, 186, 0.15); /* Enhances legibility against the estate photo */
+    }
+
+    .split-word-left {
+      margin-right: 0.12em;
+    }
+
+    .split-word-right {
+      margin-left: 0.12em;
+    }
+
+    /* Entrance Logo Badge (Centered above entrance text) */
+    .entrance-logo-badge {
+      position: absolute;
+      top: calc(50% - 130px);
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 15;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      pointer-events: none;
+    }
+
+    /* Image 2 Overlay: Full Header & Concierge Search Desk */
+    #heroContentOverlay {
+      position: absolute;
+      inset: 0;
+      z-index: 25;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+      opacity: 0;
+      transform: scale(0.96);
+      transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+      pointer-events: none;
+    }
+
+    #heroContentOverlay.content-active {
+      opacity: 1;
+      transform: scale(1);
+      pointer-events: auto;
+    }
+
+    .hero-meta-tag {
+      position: absolute;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: #12151A;
+      opacity: 0.65;
+      z-index: 30;
+      pointer-events: none;
+    }
+    /* ================= ARCHITECTURAL ACCORDION GALLERY ================= */
+    .estate-accordion-wrap {
+      display: flex;
+      width: 100%;
+      height: 480px;
+      gap: 12px;
+      padding: 0 1rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .estate-panel {
+      position: relative;
+      flex: 1;
+      height: 100%;
+      border-radius: 24px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: flex 0.65s cubic-bezier(0.16, 1, 0.3, 1), transform 0.4s ease;
+      background: #12151A;
+      box-shadow: 0 10px 30px -10px rgba(18, 21, 26, 0.2);
+    }
+
+    /* Active / Hovered card expands significantly wider */
+    .estate-panel:hover,
+    .estate-panel.panel-active {
+      flex: 3.5;
+    }
+
+    .estate-panel img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transform: scale(1.08);
+      transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), filter 0.5s ease;
+      filter: brightness(0.9) contrast(1.02);
+    }
+
+    .estate-panel:hover img,
+    .estate-panel.panel-active img {
+      transform: scale(1.0);
+      filter: brightness(0.98);
+    }
+
+    /* Metadata Badge Overlay on Card */
+    .estate-panel-info {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, transparent 40%, rgba(18, 21, 26, 0.88) 100%);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 1.5rem;
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+      pointer-events: none;
+    }
+
+    .estate-panel:hover .estate-panel-info,
+    .estate-panel.panel-active .estate-panel-info {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Vertical Tag for Compressed State */
+    .estate-vertical-tag {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%) rotate(-90deg);
+      white-space: nowrap;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.85);
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+    }
+
+    .estate-panel:hover .estate-vertical-tag,
+    .estate-panel.panel-active .estate-vertical-tag {
+      opacity: 0;
+    }
+    /* ================= UNIFIED PLATFORM LIVE-MOTION STYLES ================= */
+    html {
+      scroll-behavior: smooth;
+    }
+
+    /* Ambient Cadastral Ribbon Canvas (Full Page Background Path) */
+    #ambient-motion-svg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.45;
+    }
+
+    /* Floating Adaptive Header on Scroll */
+    header {
+      transition: background-color 0.4s ease, box-shadow 0.4s ease, padding 0.4s ease;
+    }
+    header.header-scrolled {
+      background-color: rgba(250, 248, 245, 0.92) !important;
+      backdrop-filter: blur(16px);
+      box-shadow: 0 10px 30px -5px rgba(18, 21, 26, 0.05);
+      padding-top: 0.75rem !important;
+      padding-bottom: 0.75rem !important;
+    }
+
+    /* Scroll Reveal Stagger System */
+    .motion-reveal {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: opacity, transform;
+    }
+
+    .motion-reveal.motion-revealed {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Stagger Delays for Grid Children */
+    .delay-1 { transition-delay: 0.1s; }
+    .delay-2 { transition-delay: 0.2s; }
+    .delay-3 { transition-delay: 0.3s; }
+    .delay-4 { transition-delay: 0.4s; }
+
+    /* Interactive Architectural Custom Pointer */
+    #editorial-cursor {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 12px;
+      height: 12px;
+      background-color: #0F52BA;
+      border-radius: 9999px;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: width 0.25s cubic-bezier(0.16, 1, 0.3, 1), 
+                  height 0.25s cubic-bezier(0.16, 1, 0.3, 1), 
+                  background-color 0.25s ease, 
+                  opacity 0.25s ease;
+      opacity: 0;
+    }
+
+    #editorial-cursor.cursor-active {
+      width: 56px;
+      height: 56px;
+      background-color: rgba(15, 82, 186, 0.12);
+      border: 1.5px solid #0F52BA;
+      backdrop-filter: blur(2px);
+    }
+
+    @media (max-width: 768px) {
+      #editorial-cursor { display: none; }
+    }
+    /* ================= AXIOMA-STYLE MODERN ELEVATION SHOWCASE ================= */
+    .axioma-frame {
+      position: relative;
+      border-radius: 36px;
+      border: 8px solid rgba(255, 255, 255, 0.95);
+      box-shadow: 0 35px 80px -15px rgba(15, 82, 186, 0.15), 0 0 0 1px #E7E2DA;
+      overflow: hidden;
+      background: #0f131a;
+    }
+
+    .axioma-back-text {
+      position: absolute;
+      top: 14%;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: 'Italiana', serif;
+      font-size: clamp(3.5rem, 11vw, 12rem);
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      white-space: nowrap;
+      color: rgba(255, 255, 255, 0.28);
+      text-shadow: 0 0 40px rgba(255, 255, 255, 0.15);
+      z-index: 2;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    .axioma-elevation-img {
+      position: relative;
+      z-index: 3;
+      width: 100%;
+      height: 620px;
+      object-fit: cover;
+      object-position: center bottom;
+      filter: contrast(1.05) brightness(0.96);
+    }
+
+    .axioma-glass-stat {
+      background: rgba(18, 21, 26, 0.45);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 20px;
+    }
+    
+  </style>
+</head>
+<body class="relative selection:bg-brandBlue selection:text-white">
+
+  <!-- Architectural Background Orbs -->
+  <div class="ambient-glow-1"></div>
+  <div class="ambient-glow-2"></div>
+
+  <!-- ================= TOP NAVIGATION (STRICTLY 3 NAV LINKS) ================= -->
+  <header class="fixed top-0 left-0 right-0 z-50 glass-nav transition-all duration-300">
+    <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+      
+      <!-- Brand Logo SVG -->
+      <a href="javascript:switchTab('home')" class="flex items-center gap-3.5 group">
+        <img src="https://scontent.cdninstagram.com/v/t51.82787-19/802333309_18113565055820501_4586330556296927883_n.jpg?stp=dst-jpg_s150x150_tt6&_nc_cat=110&ccb=7-5&_nc_sid=f7ccc5&efg=eyJ2ZW5jb2RlX3RhZyI6InByb2ZpbGVfcGljLnd3dy4xMDgwLkMzIn0%3D&_nc_ohc=z9IUbsAmhRgQ7kNvwG5YGJd&_nc_oc=AdpxJuD8ciXu3q0ATT1TecsuVPHK82bV_qxJ6ONpbjy1qq8uMG20mRlpF9PzMtUhHl2YUm1dzIj7AT28Akj9uwxc&_nc_zt=24&_nc_ht=scontent.cdninstagram.com&_nc_gid=qvdPfIeaQETgah3fZAkyPQ&_nc_ss=7b689&oh=00_AQLUs83yN1lcvIvvANXHzvcP8siTsuiC--KIUPaqC1tQzQ&oe=6AB5C5D7" alt="Own My ProperT Logo" class="h-16 w-16 object-contain transform group-hover:scale-105 transition-transform duration-300">
+          <path d="M50 8L15 38H28V72H72V38H85L50 8Z" stroke="#0F52BA" stroke-width="4.5" stroke-linejoin="round"/>
+          <path d="M50 20L28 40H38V64H62V40H72L50 20Z" stroke="#16A34A" stroke-width="3.5" stroke-linejoin="round"/>
+          <path d="M42 42H58V58H42Z" fill="#0F52BA"/>
+          <!-- Integrated Bottom Key Base -->
+          <circle cx="28" cy="84" r="8" stroke="#0F52BA" stroke-width="4"/>
+          <path d="M36 84H76L82 78V84L86 80V84H90" stroke="#0F52BA" stroke-width="4" stroke-linecap="round"/>
+          <path d="M64 42L72 34V46" stroke="#16A34A" stroke-width="3" stroke-linecap="round"/>
+        </svg>
+        <div class="leading-tight">
+          <span class="block font-italiana font-bold text-xl tracking-wider text-textDark">Own My ProperT</span>
+          <span class="text-[9px] tracking-[0.25em] text-brandBlue uppercase font-bold">Spatial Concierge</span>
+        </div>
+      </a>
+
+      <!-- EXACTLY 3 NAV LINKS (HOME, PROPERTIES) -->
+      <!-- CLEAN 2-ITEM NAVIGATION ONLY -->
+      <nav class="hidden md:flex items-center gap-1.5 bg-[#EFECE6] p-1.5 rounded-full border border-stoneBorder">
+        <button id="nav-home" onclick="switchTab('home')" class="nav-btn px-6 py-2 rounded-full text-xs font-bold uppercase tracking-widest text-white bg-textDark shadow-md transition-all">Home</button>
+        <button id="nav-properties" onclick="switchTab('properties')" class="nav-btn px-6 py-2 rounded-full text-xs font-bold uppercase tracking-widest text-textMuted hover:text-textDark transition-all">Properties</button>
+      </nav>
+
+      <!-- Action Buttons -->
+      <div class="flex items-center gap-3">
+        <button onclick="openSellModal()" class="text-xs font-bold uppercase px-4 py-2.5 rounded-full border border-stoneBorder bg-white hover:border-brandGreen hover:text-brandGreen text-textDark transition-all shadow-sm flex items-center gap-1.5">
+          <i data-lucide="tag" class="w-3.5 h-3.5 text-brandGreen"></i>
+          Sell Your Property
+        </button>
+        <button onclick="openHuntModal()" class="hidden sm:inline-flex items-center gap-2 bg-brandBlue hover:bg-blue-700 text-white text-xs font-bold tracking-wider uppercase px-5 py-2.5 rounded-full transition-all shadow-sm hover:shadow-brandBlue/20 transform hover:scale-[1.02]">
+          <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+          Property Hunt
+        </button>
+      </div>
+  </header>
+
+  
+  <!-- ================= VIEW 1: HOME PAGE ================= -->
+  <main id="view-home" class="view-panel block pt-28 pb-20">
+    
+    <!-- ================= CINEMATIC SPLIT REVEAL HERO ================= -->
+    <!-- ================= BRAND WHITE SEAMLESS SPLIT HERO ================= -->
+    <!-- ================= CINEMATIC SPLIT HERO WITH INTEGRATED CONCIERGE DESK ================= -->
+    <section class="reveal-hero-section" id="heroScrollRunway">
+      <div class="reveal-sticky-box">
+        
+        <!-- Entrance Logo Badge (Positioned at Entrance) -->
+        <div class="entrance-logo-badge" id="entranceBadge">
+          <div class="w-14 h-14 rounded-2xl bg-brandBlue text-white font-italiana font-bold text-2xl flex items-center justify-center shadow-lg shadow-brandBlue/25 border border-white/20">
+            <img src="https://scontent.cdninstagram.com/v/t51.82787-19/802333309_18113565055820501_4586330556296927883_n.jpg?stp=dst-jpg_s150x150_tt6&_nc_cat=110&ccb=7-5&_nc_sid=f7ccc5&efg=eyJ2ZW5jb2RlX3RhZyI6InByb2ZpbGVfcGljLnd3dy4xMDgwLkMzIn0%3D&_nc_ohc=z9IUbsAmhRgQ7kNvwG5YGJd&_nc_oc=AdpxJuD8ciXu3q0ATT1TecsuVPHK82bV_qxJ6ONpbjy1qq8uMG20mRlpF9PzMtUhHl2YUm1dzIj7AT28Akj9uwxc&_nc_zt=24&_nc_ht=scontent.cdninstagram.com&_nc_gid=qvdPfIeaQETgah3fZAkyPQ&_nc_ss=7b689&oh=00_AQLUs83yN1lcvIvvANXHzvcP8siTsuiC--KIUPaqC1tQzQ&oe=6AB5C5D7" class="h- w-12 rounded-xl object-cover transform group-hover:scale-105 transition-transform duration-300 border border-stoneBorder">
+          </div>
+        </div>
+
+        <!-- Top Editorial Meta -->
+        <div class="hero-meta-tag top-8 left-8 sm:left-12 flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-brandGreen animate-pulse"></span>
+          Tirupati Prime Land Ledger
+        </div>
+        <div class="hero-meta-tag top-8 right-8 sm:right-12">
+          Municipal LP &amp; RERA Sanctioned
+        </div>
+
+        <!-- Background Estate Visual -->
+        <div class="hero-bg-visual">
+          <img src="https://i.pinimg.com/1200x/85/2f/b5/852fb504d7db65d303e89a38d9b8f81f.jpg" alt="Verified Estate" id="heroCurtainImg">
+          <div class="hero-visual-dimmer" id="heroDimmer"></div>
+        </div>
+
+        <!-- Left White Door -->
+        <div class="split-curtain-door door-left" id="doorLeft">
+          <div class="split-word-left">OWN MY</div>
+        </div>
+
+        <!-- Right White Door -->
+        <div class="split-curtain-door door-right" id="doorRight">
+          <div class="split-word-right">PROPERT</div>
+        </div>
+
+        <!-- COMPLETE IMAGE 2 OVERLAY (Directly over the background image) -->
+        <div id="heroContentOverlay" class="max-w-3xl w-full mx-auto text-center">
+          
+         <!-- Header Text Above the Card -->
+        <div class="text-center z-20 max-w-2xl px-4 mb-4">
+          <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white text-[10px] font-bold uppercase tracking-widest mb-3">
+            <span class="w-1.5 h-1.5 rounded-full bg-brandGreen animate-pulse"></span>
+            Zero Spam • Dedicated Hunters • 100% Real-Time
+          </div>
+         <!-- Centered Single-Line Header -->
+<div class="w-full flex flex-col items-center justify-center text-center px-4">
+  
+ 
+
+  <!-- Headline: Strictly 1 Line & Centered on Desktop & Mobile -->
+  <h1 class="font-italiana text-center text-white font-extrabold tracking-tight whitespace-nowrap text-3xl sm:text-5xl md:text-6xl lg:text-7xl drop-shadow-[0_2px_14px_rgba(0,0,0,0.8)]">
+    PRECISION OVER NOISE
+  </h1>
+
+</div>
+          
+          <!-- Brand Blue Script Italic -->
+          <div class="font-merchant text-2xl sm:text-4xl text-white mt-1 font-regular drop-shadow-[0_2px_10px_rgba(0,0,0,0.6)]">
+            Sourced for the few
+          </div>
+          
+          <!-- Brightened Subtitle -->
+          <p class="text-xs sm:text-sm text-stone-200 mt-3 max-w-lg mx-auto leading-relaxed drop-shadow-[0_1px_6px_rgba(0,0,0,0.8)]">
+            <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white text-[10px] font-bold uppercase tracking-widest mb-3">
+            Tirupati's flagship PropTech portal. Our dedicated property-hunting team evaluates off-market and verified listings with zero cold calls from unauthorized middlemen.
+          </p>
+        </div>
+
+          <!-- Image 2 Floating Concierge Form Card -->
+          <div class="bg-white/95 backdrop-blur-xl border border-stoneBorder rounded-3xl p-6 sm:p-8 shadow-2xl space-y-4 max-w-2xl mx-auto w-full">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 border border-blue-200 text-brandBlue text-[11px] font-bold tracking-wider uppercase">
+              <i data-lucide="compass" class="w-3.5 h-3.5"></i>
+              Personalized Concierge Service
+            </div>
+
+            <h2 class="font-italiana font-bold text-2xl sm:text-3xl text-textDark">
+              Tell Us What Property You're Looking For
+            </h2>
+
+            <p class="text-xs text-textMuted max-w-md mx-auto leading-relaxed">
+              You don't need to go road-to-road searching for properties. Share your requirements with us, and our property-hunting team will search for suitable properties and present the best available options for you to choose from.
+            </p>
+
+            <div class="pt-2 flex flex-col sm:flex-row items-center justify-center gap-4">
+              <button onclick="openHuntModal()" class="w-full sm:w-auto bg-brandBlue hover:bg-blue-700 text-white font-bold text-xs uppercase px-8 py-3.5 rounded-full transition-all shadow-md shadow-brandBlue/20 flex items-center justify-center gap-2 transform hover:scale-[1.02]">
+                <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+                <span>Start My Property Hunt</span>
+              </button>
+              
+              <div class="flex items-center gap-1.5 text-xs text-textMuted font-semibold">
+                <i data-lucide="shield-check" class="w-4 h-4 text-brandGreen"></i>
+                <span>Zero-Spam Identity Shield Active</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Bottom Directional Meta -->
+        <div class="hero-meta-tag bottom-8 left-8 sm:left-12 flex items-center gap-2">
+          <i data-lucide="arrow-down" class="w-3.5 h-3.5 text-brandBlue animate-bounce"></i>
+          Scroll Down to Open
+        </div>
+        <div class="hero-meta-tag bottom-8 right-8 sm:right-12">
+          Verified Direct Listings Only
+        </div>
+
+      </div>
+    </section>
+
+    <!-- SECTION 2: TOP 4 PREMIER PROPERTIES -->
+    <section class="max-w-7xl mx-auto px-6 py-20 border-t border-stoneBorder">
+      <div class="flex flex-col md:flex-row md:items-end justify-between mb-12">
+        <div>
+          <span class="text-brandBlue text-xs font-bold uppercase tracking-widest">Handpicked Portfolio</span>
+          <h2 class="font-italiana text-3xl sm:text-5xl font-normal text-textDark mt-1">Top 4 Flagship Residences</h2>
+        </div>
+        <button onclick="switchTab('properties')" class="mt-4 md:mt-0 text-xs font-bold tracking-widest uppercase text-textMuted hover:text-brandBlue flex items-center gap-2 transition-colors">
+          View All Listings <i data-lucide="arrow-right" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <!-- 4 Cards Grid with 3D Mouse Tilt -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 perspective-container">
+        
+        <!-- Property 1 -->
+        <div class="tilt-card glass-card rounded-3xl overflow-hidden group flex flex-col justify-between" onmousemove="handleTilt(event, this)" onmouseleave="resetTilt(this)">
+          <div>
+            <div class="relative h-60 overflow-hidden bg-gray-100">
+              <img src="https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=800&q=80" alt="Villa" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out">
+              <span class="absolute top-4 left-4 bg-brandBlue text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider shadow-sm">TUDA Verified</span>
+              <span class="absolute top-4 right-4 bg-white/90 backdrop-blur-md text-textDark text-[11px] font-mono font-semibold px-2.5 py-1 rounded-lg border border-stoneBorder">East Facing</span>
+            </div>
+            <div class="p-5">
+              <div class="text-xs text-brandGreen font-bold">Karakambadi Road, Tirupati</div>
+              <h3 class="font-italiana font-bold text-xl text-textDark mt-1 group-hover:text-brandBlue transition-colors">The Serene Courtyard Villa</h3>
+              <p class="text-xs text-textMuted mt-2 leading-relaxed">4BHK Duplex with private splash pool, landscaped garden, and 2 covered car parks.</p>
+              <div class="flex items-center gap-3 mt-4 pt-4 border-t border-stoneBorder text-[11px] text-textMuted font-mono">
+                <span>3,200 sq.ft</span>
+                <span>•</span>
+                <span>Ready Possession</span>
+              </div>
+            </div>
+          </div>
+          <div class="p-5 pt-0 flex items-center justify-between">
+            <div>
+              <div class="text-[10px] text-textMuted uppercase font-bold tracking-wider">Sanctioned Price</div>
+              <div class="font-italiana font-bold text-lg text-textDark price-inr">₹ 1.45 Cr</div>
+              <div class="font-italiana font-bold text-lg text-textDark price-usd hidden">$ 174,000</div>
+            </div>
+            <button onclick="requestInspection('The Serene Courtyard Villa')" class="bg-[#EFECE6] hover:bg-brandBlue hover:text-white text-textDark text-xs font-bold px-4 py-2 rounded-xl transition-colors">Inspect</button>
+          </div>
+        </div>
+
+        <!-- Property 2 -->
+        <div class="tilt-card glass-card rounded-3xl overflow-hidden group flex flex-col justify-between" onmousemove="handleTilt(event, this)" onmouseleave="resetTilt(this)">
+          <div>
+            <div class="relative h-60 overflow-hidden bg-gray-100">
+              <img src="https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=800&q=80" alt="Apartment" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out">
+              <span class="absolute top-4 left-4 bg-brandGreen text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider shadow-sm">RERA Approved</span>
+              <span class="absolute top-4 right-4 bg-white/90 backdrop-blur-md text-textDark text-[11px] font-mono font-semibold px-2.5 py-1 rounded-lg border border-stoneBorder">North Facing</span>
+            </div>
+            <div class="p-5">
+              <div class="text-xs text-brandGreen font-bold">Chandragiri Bypass, Tirupati</div>
+              <h3 class="font-italiana font-bold text-xl text-textDark mt-1 group-hover:text-brandBlue transition-colors">Aura Sky Residencies</h3>
+              <p class="text-xs text-textMuted mt-2 leading-relaxed">Luxury 3BHK tower overlooking green hill contours. Clubhouse and EV chargers.</p>
+              <div class="flex items-center gap-3 mt-4 pt-4 border-t border-stoneBorder text-[11px] text-textMuted font-mono">
+                <span>1,850 sq.ft</span>
+                <span>•</span>
+                <span>Dec 2026</span>
+              </div>
+            </div>
+          </div>
+          <div class="p-5 pt-0 flex items-center justify-between">
+            <div>
+              <div class="text-[10px] text-textMuted uppercase font-bold tracking-wider">Sanctioned Price</div>
+              <div class="font-italiana font-bold text-lg text-textDark price-inr">₹ 78.5 Lakhs</div>
+              <div class="font-italiana font-bold text-lg text-textDark price-usd hidden">$ 94,200</div>
+            </div>
+            <button onclick="requestInspection('Aura Sky Residencies')" class="bg-[#EFECE6] hover:bg-brandBlue hover:text-white text-textDark text-xs font-bold px-4 py-2 rounded-xl transition-colors">Inspect</button>
+          </div>
+        </div>
+
+        <!-- Property 3 -->
+        <div class="tilt-card glass-card rounded-3xl overflow-hidden group flex flex-col justify-between" onmousemove="handleTilt(event, this)" onmouseleave="resetTilt(this)">
+          <div>
+            <div class="relative h-60 overflow-hidden bg-gray-100">
+              <img src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=800&q=80" alt="Plot" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out">
+              <span class="absolute top-4 left-4 bg-brandBlue text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider shadow-sm">TUDA LP #48/2024</span>
+              <span class="absolute top-4 right-4 bg-white/90 backdrop-blur-md text-textDark text-[11px] font-mono font-semibold px-2.5 py-1 rounded-lg border border-stoneBorder">Corner Plots</span>
+            </div>
+            <div class="p-5">
+              <div class="text-xs text-brandGreen font-bold">Renigunta Airport Road</div>
+              <h3 class="font-italiana font-bold text-xl text-textDark mt-1 group-hover:text-brandBlue transition-colors">Vedic Greens Gated Plots</h3>
+              <p class="text-xs text-textMuted mt-2 leading-relaxed">Clear title, 40ft blacktop BT roads, 100% Vastu, bank loan sanctioned by SBI & HDFC.</p>
+              <div class="flex items-center gap-3 mt-4 pt-4 border-t border-stoneBorder text-[11px] text-textMuted font-mono">
+                <span>200 - 450 sq.yd</span>
+                <span>•</span>
+                <span>Immediate Reg.</span>
+              </div>
+            </div>
+          </div>
+          <div class="p-5 pt-0 flex items-center justify-between">
+            <div>
+              <div class="text-[10px] text-textMuted uppercase font-bold tracking-wider">Starting From</div>
+              <div class="font-italiana font-bold text-lg text-textDark price-inr">₹ 34.0 Lakhs</div>
+              <div class="font-italiana font-bold text-lg text-textDark price-usd hidden">$ 40,800</div>
+            </div>
+            <button onclick="requestInspection('Vedic Greens Gated Plots')" class="bg-[#EFECE6] hover:bg-brandBlue hover:text-white text-textDark text-xs font-bold px-4 py-2 rounded-xl transition-colors">Inspect</button>
+          </div>
+        </div>
+
+        <!-- Property 4 -->
+        <div class="tilt-card glass-card rounded-3xl overflow-hidden group flex flex-col justify-between" onmousemove="handleTilt(event, this)" onmouseleave="resetTilt(this)">
+          <div>
+            <div class="relative h-60 overflow-hidden bg-gray-100">
+              <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80" alt="Mansion" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out">
+              <span class="absolute top-4 left-4 bg-brandBlue text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider shadow-sm">Architectural Gem</span>
+              <span class="absolute top-4 right-4 bg-white/90 backdrop-blur-md text-textDark text-[11px] font-mono font-semibold px-2.5 py-1 rounded-lg border border-stoneBorder">North-East</span>
+            </div>
+            <div class="p-5">
+              <div class="text-xs text-brandGreen font-bold">Alipiri Foothills Belt</div>
+              <h3 class="font-italiana font-bold text-xl text-textDark mt-1 group-hover:text-brandBlue transition-colors">The Hillside Cantilever</h3>
+              <p class="text-xs text-textMuted mt-2 leading-relaxed">Organic travertine residence featuring floor-to-ceiling glass, rooftop deck, and cinema.</p>
+              <div class="flex items-center gap-3 mt-4 pt-4 border-t border-stoneBorder text-[11px] text-textMuted font-mono">
+                <span>4,800 sq.ft</span>
+                <span>•</span>
+                <span>Private Sale</span>
+              </div>
+            </div>
+          </div>
+          <div class="p-5 pt-0 flex items-center justify-between">
+            <div>
+              <div class="text-[10px] text-textMuted uppercase font-bold tracking-wider">Sanctioned Price</div>
+              <div class="font-italiana font-bold text-lg text-textDark price-inr">₹ 2.80 Cr</div>
+              <div class="font-italiana font-bold text-lg text-textDark price-usd hidden">$ 336,000</div>
+            </div>
+            <button onclick="requestInspection('The Hillside Cantilever')" class="bg-[#EFECE6] hover:bg-brandBlue hover:text-white text-textDark text-xs font-bold px-4 py-2 rounded-xl transition-colors">Inspect</button>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- SECTION 3: WORKING METHODOLOGY -->
+    <section class="max-w-7xl mx-auto px-6 py-20 border-t border-stoneBorder">
+      <div class="text-center max-w-2xl mx-auto mb-16">
+        <span class="text-brandBlue text-xs font-bold uppercase tracking-widest">Our Methodology</span>
+        <h2 class="font-italiana text-3xl sm:text-5xl font-normal text-textDark mt-1">How Own My ProperT Operates</h2>
+        <p class="text-textMuted text-xs sm:text-sm mt-3">Replacing chaotic classifieds with algorithmic precision and verified safety.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="glass-card p-8 rounded-3xl relative group hover:border-brandBlue transition-all">
+          <div class="font-italiana text-5xl font-bold text-gray-200 group-hover:text-brandBlue transition-colors mb-4">01</div>
+          <h3 class="font-italiana font-bold text-xl text-textDark mb-2">Requirement Ingestion</h3>
+          <p class="text-xs text-textMuted leading-relaxed">
+            You submit your detailed preferences. Your contact is protected by our Zero-Spam Identity Shield, preventing unauthorized call cascades.
+          </p>
+        </div>
+
+        <div class="glass-card p-8 rounded-3xl relative group hover:border-brandGreen transition-all">
+          <div class="font-italiana text-5xl font-bold text-gray-200 group-hover:text-brandGreen transition-colors mb-4">02</div>
+          <h3 class="font-italiana font-bold text-xl text-textDark mb-2">Legal & Spatial Audit</h3>
+          <p class="text-xs text-textMuted leading-relaxed">
+            Our hunting team evaluates options only with documented municipal clearance (TUDA / RERA approval numbers) and verified boundary coordinates.
+          </p>
+        </div>
+
+        <div class="glass-card p-8 rounded-3xl relative group hover:border-brandBlue transition-all">
+          <div class="font-italiana text-5xl font-bold text-gray-200 group-hover:text-brandBlue transition-colors mb-4">03</div>
+          <h3 class="font-italiana font-bold text-xl text-textDark mb-2">Shielded Inspection</h3>
+          <p class="text-xs text-textMuted leading-relaxed">
+            You receive hand-selected matches. If you choose to inspect on-site, a single direct appointment is set. No spam, no unauthorized broker circles.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 4: ABOUT US & BRAND ETHOS -->
+    <section class="max-w-7xl mx-auto px-6 py-20 border-t border-stoneBorder">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <div>
+          <span class="text-brandBlue text-xs font-bold uppercase tracking-widest">About Own My ProperT</span>
+          <h2 class="font-italiana text-3xl sm:text-5xl font-normal text-textDark mt-1 leading-tight">
+            We Built This Because Real Estate Was Broken.
+          </h2>
+          <p class="text-xs sm:text-sm text-textMuted mt-4 leading-relaxed font-light">
+            Traditional classifieds portals monetize by distributing user contact numbers to dozens of brokers, generating spam calls and showing unverified, duplicate listings.
+          </p>
+          <p class="text-xs sm:text-sm text-textMuted mt-3 leading-relaxed font-light">
+            <strong>Own My ProperT</strong> acts as your private spatial concierge. Tested first in the high-growth corridor of Tirupati and engineered to scale internationally, we provide verified inventory and total buyer identity protection.
+          </p>
+          
+          <div class="grid grid-cols-3 gap-6 mt-8 pt-6 border-t border-stoneBorder">
+            <div>
+              <div class="font-italiana text-3xl font-bold text-textDark">100%</div>
+              <div class="text-[11px] text-textMuted uppercase font-semibold mt-0.5">Title Vetted</div>
+            </div>
+            <div>
+              <div class="font-italiana text-3xl font-bold text-brandGreen">0</div>
+              <div class="text-[11px] text-textMuted uppercase font-semibold mt-0.5">Cold Call Spam</div>
+            </div>
+            <div>
+              <div class="font-italiana text-3xl font-bold text-brandBlue">₹0</div>
+              <div class="text-[11px] text-textMuted uppercase font-semibold mt-0.5">Buyer Search Fee</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Editorial Framing -->
+        <div class="relative rounded-3xl overflow-hidden border border-stoneBorder glass-card p-3 shadow-lg">
+          <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1000&q=80" alt="Interior Architecture" class="rounded-2xl w-full h-96 object-cover">
+          <div class="absolute bottom-6 left-6 right-6 p-4 rounded-xl bg-white/95 backdrop-blur-md border border-stoneBorder shadow-sm">
+            <span class="text-[15px] text-brandBlue font-spline sans font-bold">Tirupati Pilot Initiative</span>
+            <div class="text-xs text-textDark font-medium mt-0.5">Connecting high-value regional buyers and NRI investors with verified inventory.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ================= VIEW 2: PROPERTIES LISTING PAGE ================= -->
+  <section id="view-properties" class="view-panel hidden pt-28 pb-20 max-w-7xl mx-auto px-6">
+    <div class="mb-10">
+      <span class="text-brandBlue text-xs font-bold uppercase tracking-widest">Catalog</span>
+      <h2 class="font-italiana text-3xl sm:text-5xl font-normal text-textDark mt-1">Verified Properties Directory</h2>
+      <p class="text-textMuted text-xs sm:text-sm mt-2">Every listing is physically audited and tagged with statutory approval codes.</p>
+    </div>
+
+    <!-- Category Filter Bar -->
+    <div class="flex flex-wrap gap-2 mb-8">
+      <button onclick="filterProperties('all', this)" class="prop-filter-btn px-5 py-2 rounded-full text-xs font-bold bg-textDark text-white shadow-sm">All Inventory (6)</button>
+      <button onclick="filterProperties('plot', this)" class="prop-filter-btn px-5 py-2 rounded-full text-xs font-bold bg-white hover:bg-gray-100 text-textMuted border border-stoneBorder">Township Plots</button>
+      <button onclick="filterProperties('villa', this)" class="prop-filter-btn px-5 py-2 rounded-full text-xs font-bold bg-white hover:bg-gray-100 text-textMuted border border-stoneBorder">Luxury Villas</button>
+      <button onclick="filterProperties('apartment', this)" class="prop-filter-btn px-5 py-2 rounded-full text-xs font-bold bg-white hover:bg-gray-100 text-textMuted border border-stoneBorder">Apartments</button>
+    </div>
+
+    <!-- Properties Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="propertiesCatalogGrid">
+      <!-- Injected dynamically via JavaScript -->
+    </div>
+  </section>
+
+<!-- ================= MODAL: SELL PROPERTY / PLOT INTAKE FORM ================= -->
+  <div id="sellModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-md hidden flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
+    <div class="glass-card max-w-2xl w-full my-auto rounded-3xl border border-stoneBorder shadow-2xl relative overflow-hidden bg-white max-h-[92vh] flex flex-col">
+      
+      <div class="p-6 border-b border-stoneBorder flex items-center justify-between sticky top-0 bg-white/95 backdrop-blur-md z-20">
+        <div>
+          <div class="text-brandGreen text-[11px] font-bold uppercase tracking-widest">Property Valuation & Listing Desk</div>
+          <h2 class="font-italiana font-bold text-2xl text-textDark">Submit Your Property For Verification</h2>
+        </div>
+        <button onclick="closeSellModal()" class="w-9 h-9 rounded-full bg-[#FAF8F5] border border-stoneBorder flex items-center justify-center text-textMuted hover:text-textDark">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <div class="p-6 sm:p-8 overflow-y-auto space-y-6 flex-1">
+        <form id="sellPropertyForm" onsubmit="handleSellFormSubmit(event)" class="space-y-5">
+          <p class="text-xs text-textMuted leading-relaxed">
+            Please share your ownership details. Our property auditing team will verify title clearance, RERA/TUDA sanction, and schedule a physical inspection before publishing to the live portal.
+          </p>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-bold uppercase text-textDark mb-1">Owner / Seller Name*</label>
+              <input type="text" id="seller_name" required placeholder="Full Name" class="w-full bg-[#FAF8F5] border border-stoneBorder rounded-xl p-3 text-xs text-textDark focus:border-brandGreen focus:outline-none">
+            </div>
+            <div>
+              <label class="block text-xs font-bold uppercase text-textDark mb-1">WhatsApp / Contact Number*</label>
+              <input type="tel" id="seller_phone" required placeholder="e.g. 9848012345" class="w-full bg-[#FAF8F5] border border-stoneBorder rounded-xl p-3 text-xs text-textDark focus:border-brandGreen focus:outline-none">
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-bold uppercase text-textDark mb-1">Property Type*</label>
+              <select id="seller_prop_type" class="w-full bg-[#FAF8F5] border border-stoneBorder rounded-xl p-3 text-xs text-textDark focus:border-brandGreen focus:outline-none">
+                <option value="plot">Layout Plot / Open Land</option>
+                <option value="villa">Independent Villa / House</option>
+                <option value="apartment">Apartment Flat</option>
+                <option value="commercial">Commercial Site</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-bold uppercase text-textDark mb-1">Exact Location / Micro-Corridor*</label>
+              <input type="text" id="seller_location" required placeholder="e.g. Karakambadi Road, Near Highway" class="w-full bg-[#FAF8F5] border border-stoneBorder rounded-xl p-3 text-xs text-textDark focus:border-brandGreen focus:outline-none">
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div>
+              <label class="block text-xs font-bold uppercase text-textDark mb-1">Extent / Size*</label>
+              <input type="text" id="seller_size" required placeholder="e.g. 240 sq.yards / 1,800 sq.ft" class="w-full bg-[#FAF8F5] border border-stoneBorder rounded-xl p-3 text-xs text-textDark focus:border-brandGreen focus:outline-none">
+            </div>
+            <div>
+              <label class="block text-xs font-bold uppercase text-textDark mb-1">Facing*</label>
+              <select id="seller_facing" class="w-full bg-[#FAF8F5] border border-stoneBorder rounded-xl p-3 text-xs text-textDark focus:border-brandGreen focus:outline-none">
+                <option value="East">East</option>
+                <option value="North">North</option>
+                <option value="North-East">North-East</option>
+                <option value="West">West</option>
+                <option value="South">South</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-bold uppercase text-textDark mb-1">Expected Price (INR)*</label>
+              <input type="text" id="seller_price" required placeholder="e.g. ₹ 45 Lakhs" class="w-full bg-[#FAF8F5] border border-stoneBorder rounded-xl p-3 text-xs text-textDark focus:border-brandGreen focus:outline-none">
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold uppercase text-textDark mb-1">Statutory Approvals (TUDA LP / RERA / Panchayat)</label>
+            <input type="text" id="seller_sanction" placeholder="e.g. TUDA Approved LP #42/2023 or Applied" class="w-full bg-[#FAF8F5] border border-stoneBorder rounded-xl p-3 text-xs text-textDark focus:border-brandGreen focus:outline-none">
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold uppercase text-textDark mb-1">Additional Details / Landmark</label>
+            <textarea id="seller_notes" rows="2" placeholder="Tell us road width, surrounding developments, or boundary details..." class="w-full bg-[#FAF8F5] border border-stoneBorder rounded-xl p-3 text-xs text-textDark resize-none focus:border-brandGreen focus:outline-none"></textarea>
+          </div>
+
+          <button type="submit" id="sellerSubmitBtn" class="w-full bg-brandGreen hover:bg-emerald-700 text-white font-bold text-xs uppercase py-4 rounded-2xl tracking-wider transition-all shadow-md flex items-center justify-center gap-2">
+            <span>Submit Property For Verification</span>
+            <i data-lucide="check-circle" class="w-4 h-4"></i>
+          </button>
+        </form>
+
+        <div id="sellSuccessState" class="hidden text-center py-8 space-y-4">
+          <div class="w-14 h-14 bg-emerald-100 text-brandGreen rounded-full flex items-center justify-center mx-auto">
+            <i data-lucide="check-check" class="w-7 h-7"></i>
+          </div>
+          <h3 class="font-italiana font-bold text-2xl text-textDark">Submission Received for Audit</h3>
+          <p class="text-xs text-textMuted max-w-sm mx-auto">
+            Our audit team has received your property details. An executive will contact you on WhatsApp to review title documents and arrange an inspection.
+          </p>
+          <button onclick="closeSellModal()" class="bg-textDark text-white text-xs font-bold uppercase px-6 py-2.5 rounded-xl">Close</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ================= MODAL: COMPREHENSIVE PROPERTY HUNT FORM ================= -->
+  <div id="huntModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-md hidden flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
+    <div class="glass-card max-w-3xl w-full my-auto rounded-3xl border border-stoneBorder shadow-2xl relative overflow-hidden bg-white max-h-[92vh] flex flex-col">
+      
+      <!-- Top Modal Header -->
+      <div class="p-6 border-b border-stoneBorder flex items-center justify-between sticky top-0 bg-white/95 backdrop-blur-md z-20">
+        <div>
+          <div class="text-brandBlue text-[11px] font-bold uppercase tracking-widest">Personalized Property Hunter</div>
+          <h2 class="font-italiana font-bold text-2xl text-textDark">Tell Us What Property You're Looking For</h2>
+        </div>
+        <button onclick="closeHuntModal()" class="w-9 h-9 rounded-full bg-[#FAF8F5] border border-stoneBorder flex items-center justify-center text-textMuted hover:text-textDark hover:border-brandBlue transition-colors">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- Scrollable Form Body -->
+      <div class="p-6 sm:p-8 overflow-y-auto space-y-8 flex-1">
+        
+        <!-- Form View -->
+        <form id="propertyHuntForm" onsubmit="handleHuntFormSubmit(event)" class="space-y-8">
+          
+          <!-- SECTION 1: YOUR DETAILS -->
+          <div class="space-y-4">
+            <div class="flex items-center gap-2 border-b border-stoneBorder pb-2">
+              <span class="w-6 h-6 rounded-full bg-brandBlue text-white text-xs font-bold flex items-center justify-center font-mono">1</span>
+              <h3 class="font-italiana font-bold text-xl text-textDark">Your Details</h3>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-bold uppercase text-textDark mb-1">Full Name*</label>
+                <input type="text" required placeholder="Enter your full name" class="w-full bg-[#FAF8F5] border border-stoneBorder rounded-xl p-3 text-xs text-textDark placeholder-gray-400 focus:outline-none focus:border-brandBlue">
+              </div>
+              <div>
+                <label class="block text-xs font-bold uppercase text-textDark mb-1">Mobile Number*</label>
+                <input type="tel" required placeholder="Enter your mobile number" class="w-full bg-[#FAF8F5] border border-stoneBorder rounded-xl p-3 text-xs text-textDark placeholder-gray-400 focus:outline-none focus:border-brandBlue">
+              </div>
+              <div>
+                <label class="block text-xs font-bold uppercase text-textDark mb-1">WhatsApp Number</label>
+                <input type="tel" placeholder="Same as mobile / Different number" class="w-full bg-[#FAF8F5] border border-stoneBorder rounded-xl p-3 text-xs text-textDark placeholder-gray-400 focus:outline-none focus:border-brandBlue">
+              </div>
+              <div>
+                <label class="block text-xs font-bold uppercase text-textDark mb-1">Email Address</label>
+                <input type="email" placeholder="Enter your email address" class="w-full bg-[#FAF8F5] border border-stoneBorder rounded-xl p-3 text-xs text-textDark placeholder-gray-400 focus:outline-none focus:border-brandBlue">
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold uppercase text-textDark mb-2">Preferred Contact Method*</label>
+              <div class="flex flex-wrap gap-4 text-xs font-medium text-textDark">
+                <label class="inline-flex items-center gap-2 cursor-pointer">
+                  <input type="radio" name="contactMethod" value="Phone Call" checked class="accent-brandBlue">
+                  <span>Phone Call</span>
+                </label>
+                <label class="inline-flex items-center gap-2 cursor-pointer">
+                  <input type="radio" name="contactMethod" value="WhatsApp" class="accent-brandBlue">
+                  <span>WhatsApp</span>
+                </label>
+                <label class="inline-flex items-center gap-2 cursor-pointer">
+                  <input type="radio" name="contactMethod" value="Email" class="accent-brandBlue">
+                  <span>Email</span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- SECTION 2: WHERE ARE YOU LOOKING? -->
+          <div class="space-y-4">
+            <div class="flex items-center gap-2 border-b border-stoneBorder pb-2">
+              <span class="w-6 h-6 rounded-full bg-brandBlue text-white text-xs font-bold flex items-center justify-center font-mono">2</span>
+              <h3 class="font-italiana font-bold text-xl text-textDark">Where Are You Looking?</h3>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-bold uppercase text-textDark mb-1">City*</label>
+                <input type="text" required placeholder="Select / Enter City (e.g. Tirupati)" value="Tirupati" class="w-full bg-[#FAF8F5] border border-stoneBorder rounded-xl p-3 text-xs text-textDark focus:outline-none focus:border-brandBlue">
+              </div>
+              <div>
+                <label class="block text-xs font-bold uppercase text-textDark mb-1">Preferred Area / Localities*</label>
+                <input type="text" required placeholder="e.g. Karakambadi Road, Renigunta, MR Palle" class="w-full bg-[#FAF8F5] border border-stoneBorder rounded-xl p-3 text-xs text-textDark placeholder-gray-400 focus:outline-none focus:border-brandBlue">
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold uppercase text-textDark mb-2">Are you flexible with location?</label>
+              <div class="space-y-2 text-xs font-medium text-textDark">
+                <label class="flex items-center gap-2.5 cursor-pointer">
+                  <input type="radio" name="locFlexibility" value="No" checked class="accent-brandBlue">
+                  <span>No — Only the areas I mentioned</span>
+                </label>
+                <label class="flex items-center gap-2.5 cursor-pointer">
+                  <input type="radio" name="locFlexibility" value="Yes" class="accent-brandBlue">
+                  <span>Yes — Nearby areas are also okay</span>
+                </label>
+                <label class="flex items-center gap-2.5 cursor-pointer">
+                  <input type="radio" name="locFlexibility" value="Not sure" class="accent-brandBlue">
+                  <span>I'm not sure — Suggest suitable areas</span>
+                </label>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold uppercase text-textDark mb-2">Preferred Radius</label>
+              <div class="flex flex-wrap gap-4 text-xs font-medium text-textDark">
+                <label class="inline-flex items-center gap-2 cursor-pointer"><input type="radio" name="locRadius" value="2 km" class="accent-brandBlue"><span>2 km</span></label>
+                <label class="inline-flex items-center gap-2 cursor-pointer"><input type="radio" name="locRadius" value="5 km" checked class="accent-brandBlue"><span>5 km</span></label>
+                <label class="inline-flex items-center gap-2 cursor-pointer"><input type="radio" name="locRadius" value="10 km" class="accent-brandBlue"><span>10 km</span></label>
+                <label class="inline-flex items-center gap-2 cursor-pointer"><input type="radio" name="locRadius" value="Any" class="accent-brandBlue"><span>Any</span></label>
+              </div>
+            </div>
+          </div>
+
+          <!-- SECTION 3: WHAT PROPERTY ARE YOU LOOKING FOR? -->
+          <div class="space-y-4">
+            <div class="flex items-center gap-2 border-b border-stoneBorder pb-2">
+              <span class="w-6 h-6 rounded-full bg-brandBlue text-white text-xs font-bold flex items-center justify-center font-mono">3</span>
+              <h3 class="font-italiana font-bold text-xl text-textDark">What Property Are You Looking For?</h3>
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold uppercase text-textDark mb-2">Property Purpose*</label>
+              <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-xs font-medium text-textDark">
+                <label class="flex items-center gap-2 p-2.5 rounded-xl border border-stoneBorder bg-[#FAF8F5] cursor-pointer hover:border-brandBlue">
+                  <input type="radio" name="propPurpose" value="Residential" checked class="accent-brandBlue">
+                  <span>Residential</span>
+                </label>
+                <label class="flex items-center gap-2 p-2.5 rounded-xl border border-stoneBorder bg-[#FAF8F5] cursor-pointer hover:border-brandBlue">
+                  <input type="radio" name="propPurpose" value="Commercial" class="accent-brandBlue">
+                  <span>Commercial</span>
+                </label>
+                <label class="flex items-center gap-2 p-2.5 rounded-xl border border-stoneBorder bg-[#FAF8F5] cursor-pointer hover:border-brandBlue">
+                  <input type="radio" name="propPurpose" value="Land / Plot" class="accent-brandBlue">
+                  <span>Land / Plot</span>
+                </label>
+                <label class="flex items-center gap-2 p-2.5 rounded-xl border border-stoneBorder bg-[#FAF8F5] cursor-pointer hover:border-brandBlue">
+                  <input type="radio" name="propPurpose" value="Agricultural Land" class="accent-brandBlue">
+                  <span>Agricultural Land</span>
+                </label>
+                <label class="flex items-center gap-2 p-2.5 rounded-xl border border-stoneBorder bg-[#FAF8F5] cursor-pointer hover:border-brandBlue">
+                  <input type="radio" name="propPurpose" value="Villa" class="accent-brandBlue">
+                  <span>Villa</span>
+                </label>
+                <label class="flex items-center gap-2 p-2.5 rounded-xl border border-stoneBorder bg-[#FAF8F5] cursor-pointer hover:border-brandBlue">
+                  <input type="radio" name="propPurpose" value="Apartment" class="accent-brandBlue">
+                  <span>Apartment</span>
+                </label>
+                <label class="flex items-center gap-2 p-2.5 rounded-xl border border-stoneBorder bg-[#FAF8F5] cursor-pointer hover:border-brandBlue">
+                  <input type="radio" name="propPurpose" value="Shop / Office" class="accent-brandBlue">
+                  <span>Shop / Office</span>
+                </label>
+                <label class="flex items-center gap-2 p-2.5 rounded-xl border border-stoneBorder bg-[#FAF8F5] cursor-pointer hover:border-brandBlue">
+                  <input type="radio" name="propPurpose" value="Other" class="accent-brandBlue">
+                  <span>Other</span>
+                </label>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold uppercase text-textDark mb-2">Property Type</label>
+              <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5 text-xs font-medium text-textDark">
+                <label class="flex items-center gap-2 p-2 rounded-xl border border-stoneBorder bg-[#FAF8F5] cursor-pointer hover:border-brandBlue"><input type="checkbox" name="propType" value="Apartment" class="accent-brandBlue"><span>Apartment</span></label>
+                <label class="flex items-center gap-2 p-2 rounded-xl border border-stoneBorder bg-[#FAF8F5] cursor-pointer hover:border-brandBlue"><input type="checkbox" name="propType" value="Independent House" class="accent-brandBlue"><span>Independent House</span></label>
+                <label class="flex items-center gap-2 p-2 rounded-xl border border-stoneBorder bg-[#FAF8F5] cursor-pointer hover:border-brandBlue"><input type="checkbox" name="propType" value="Villa" class="accent-brandBlue"><span>Villa</span></label>
+                <label class="flex items-center gap-2 p-2 rounded-xl border border-stoneBorder bg-[#FAF8F5] cursor-pointer hover:border-brandBlue"><input type="checkbox" name="propType" value="Duplex" class="accent-brandBlue"><span>Duplex</span></label>
+                <label class="flex items-center gap-2 p-2 rounded-xl border border-stoneBorder bg-[#FAF8F5] cursor-pointer hover:border-brandBlue"><input type="checkbox" name="propType" value="Gated Community" class="accent-brandBlue"><span>Gated Community</span></label>
+                <label class="flex items-center gap-2 p-2 rounded-xl border border-stoneBorder bg-[#FAF8F5] cursor-pointer hover:border-brandBlue"><input type="checkbox" name="propType" value="Other" class="accent-brandBlue"><span>Other</span></label>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold uppercase text-textDark mb-2">Configuration</label>
+              <div class="flex flex-wrap gap-3 text-xs font-medium text-textDark">
+                <label class="px-3.5 py-1.5 rounded-xl border border-stoneBorder bg-[#FAF8F5] cursor-pointer flex items-center gap-2 hover:border-brandBlue"><input type="checkbox" name="propConfig" value="1 BHK" class="accent-brandBlue"><span>1 BHK</span></label>
+                <label class="px-3.5 py-1.5 rounded-xl border border-stoneBorder bg-[#FAF8F5] cursor-pointer flex items-center gap-2 hover:border-brandBlue"><input type="checkbox" name="propConfig" value="2 BHK" checked class="accent-brandBlue"><span>2 BHK</span></label>
+                <label class="px-3.5 py-1.5 rounded-xl border border-stoneBorder bg-[#FAF8F5] cursor-pointer flex items-center gap-2 hover:border-brandBlue"><input type="checkbox" name="propConfig" value="3 BHK" checked class="accent-brandBlue"><span>3 BHK</span></label>
+                <label class="px-3.5 py-1.5 rounded-xl border border-stoneBorder bg-[#FAF8F5] cursor-pointer flex items-center gap-2 hover:border-brandBlue"><input type="checkbox" name="propConfig" value="4 BHK" class="accent-brandBlue"><span>4 BHK</span></label>
+                <label class="px-3.5 py-1.5 rounded-xl border border-stoneBorder bg-[#FAF8F5] cursor-pointer flex items-center gap-2 hover:border-brandBlue"><input type="checkbox" name="propConfig" value="5+ BHK" class="accent-brandBlue"><span>5+ BHK</span></label>
+              </div>
+            </div>
+          </div>
+
+          <!-- SECTION 4: BUDGET -->
+          <div class="space-y-4">
+            <div class="flex items-center gap-2 border-b border-stoneBorder pb-2">
+              <span class="w-6 h-6 rounded-full bg-brandBlue text-white text-xs font-bold flex items-center justify-center font-mono">4</span>
+              <h3 class="font-italiana font-bold text-xl text-textDark">Budget</h3>
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold uppercase text-textDark mb-1">Your Budget Range*</label>
+              <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs font-medium text-textDark mb-3">
+                <label class="p-2.5 rounded-xl border border-stoneBorder bg-[#FAF8F5] cursor-pointer flex items-center gap-2 hover:border-brandBlue"><input type="radio" name="budgetRange" value="Below ₹25 Lakhs" class="accent-brandBlue"><span>Below ₹25 Lakhs</span></label>
+                <label class="p-2.5 rounded-xl border border-stoneBorder bg-[#FAF8F5] cursor-pointer flex items-center gap-2 hover:border-brandBlue"><input type="radio" name="budgetRange" value="₹25–50 Lakhs" class="accent-brandBlue"><span>₹25–50 Lakhs</span></label>
+                <label class="p-2.5 rounded-xl border border-stoneBorder bg-[#FAF8F5] cursor-pointer flex items-center gap-2 hover:border-brandBlue"><input type="radio" name="budgetRange" value="₹50 Lakhs–₹1 Crore" checked class="accent-brandBlue"><span>₹50 Lakhs–₹1 Crore</span></label>
+                <label class="p-2.5 rounded-xl border border-stoneBorder bg-[#FAF8F5] cursor-pointer flex items-center gap-2 hover:border-brandBlue"><input type="radio" name="budgetRange" value="₹1–2 Crores" class="accent-brandBlue"><span>₹1–2 Crores</span></label>
+                <label class="p-2.5 rounded-xl border border-stoneBorder bg-[#FAF8F5] cursor-pointer flex items-center gap-2 hover:border-brandBlue"><input type="radio" name="budgetRange" value="₹2–5 Crores" class="accent-brandBlue"><span>₹2–5 Crores</span></label>
+                <label class="p-2.5 rounded-xl border border-stoneBorder bg-[#FAF8F5] cursor-pointer flex items-center gap-2 hover:border-brandBlue"><input type="radio" name="budgetRange" value="₹5 Crores+" class="accent-brandBlue"><span>₹5 Crores+</span></label>
+                <label class="p-2.5 rounded-xl border border-stoneBorder bg-[#FAF8F5] cursor-pointer flex items-center gap-2 hover:border-brandBlue"><input type="radio" name="budgetRange" value="Flexible" class="accent-brandBlue"><span>Flexible</span></label>
+              </div>
+
+              <div class="grid grid-cols-2 gap-3 mt-2">
+                <input type="text" placeholder="Minimum Budget (e.g. ₹ 60 Lakhs)" class="bg-[#FAF8F5] border border-stoneBorder rounded-xl p-3 text-xs text-textDark focus:outline-none focus:border-brandBlue">
+                <input type="text" placeholder="Maximum Budget (e.g. ₹ 90 Lakhs)" class="bg-[#FAF8F5] border border-stoneBorder rounded-xl p-3 text-xs text-textDark focus:outline-none focus:border-brandBlue">
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold uppercase text-textDark mb-2">How will you purchase?</label>
+              <div class="flex flex-wrap gap-4 text-xs font-medium text-textDark">
+                <label class="inline-flex items-center gap-2 cursor-pointer"><input type="radio" name="purchaseMode" value="Own Funds" class="accent-brandBlue"><span>Own Funds</span></label>
+                <label class="inline-flex items-center gap-2 cursor-pointer"><input type="radio" name="purchaseMode" value="Bank Loan" checked class="accent-brandBlue"><span>Bank Loan</span></label>
+                <label class="inline-flex items-center gap-2 cursor-pointer"><input type="radio" name="purchaseMode" value="Combination of Both" class="accent-brandBlue"><span>Combination of Both</span></label>
+                <label class="inline-flex items-center gap-2 cursor-pointer"><input type="radio" name="purchaseMode" value="Not Decided" class="accent-brandBlue"><span>Not Decided</span></label>
+              </div>
+            </div>
+          </div>
+
+          <!-- SECTION 5: YOUR REQUIREMENTS -->
+          <div class="space-y-4">
+            <div class="flex items-center gap-2 border-b border-stoneBorder pb-2">
+              <span class="w-6 h-6 rounded-full bg-brandBlue text-white text-xs font-bold flex items-center justify-center font-mono">5</span>
+              <h3 class="font-italiana font-bold text-xl text-textDark">Your Requirements</h3>
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold uppercase text-textDark mb-2">What are the most important things you want?</label>
+              <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-xs font-medium text-textDark">
+                <label class="flex items-center gap-2 p-2 rounded-xl border border-stoneBorder bg-[#FAF8F5] cursor-pointer hover:border-brandBlue"><input type="checkbox" value="Vastu" checked class="accent-brandBlue"><span>Vastu</span></label>
+                <label class="flex items-center gap-2 p-2 rounded-xl border border-stoneBorder bg-[#FAF8F5] cursor-pointer hover:border-brandBlue"><input type="checkbox" value="Parking" checked class="accent-brandBlue"><span>Parking</span></label>
+                <label class="flex items-center gap-2 p-2 rounded-xl border border-stoneBorder bg-[#FAF8F5] cursor-pointer hover:border-brandBlue"><input type="checkbox" value="Lift" class="accent-brandBlue"><span>Lift</span></label>
+                <label class="flex items-center gap-2 p-2 rounded-xl border border-stoneBorder bg-[#FAF8F5] cursor-pointer hover:border-brandBlue"><input type="checkbox" value="Power Backup" class="accent-brandBlue"><span>Power Backup</span></label>
+                <label class="flex items-center gap-2 p-2 rounded-xl border border-stoneBorder bg-[#FAF8F5] cursor-pointer hover:border-brandBlue"><input type="checkbox" value="Security" class="accent-brandBlue"><span>Security</span></label>
+                <label class="flex items-center gap-2 p-2 rounded-xl border border-stoneBorder bg-[#FAF8F5] cursor-pointer hover:border-brandBlue"><input type="checkbox" value="Gated Community" class="accent-brandBlue"><span>Gated Community</span></label>
+                <label class="flex items-center gap-2 p-2 rounded-xl border border-stoneBorder bg-[#FAF8F5] cursor-pointer hover:border-brandBlue"><input type="checkbox" value="Nearby Schools" class="accent-brandBlue"><span>Nearby Schools</span></label>
+                <label class="flex items-center gap-2 p-2 rounded-xl border border-stoneBorder bg-[#FAF8F5] cursor-pointer hover:border-brandBlue"><input type="checkbox" value="Nearby Hospitals" class="accent-brandBlue"><span>Nearby Hospitals</span></label>
+                <label class="flex items-center gap-2 p-2 rounded-xl border border-stoneBorder bg-[#FAF8F5] cursor-pointer hover:border-brandBlue"><input type="checkbox" value="Nearby Transport" class="accent-brandBlue"><span>Nearby Transport</span></label>
+                <label class="flex items-center gap-2 p-2 rounded-xl border border-stoneBorder bg-[#FAF8F5] cursor-pointer hover:border-brandBlue"><input type="checkbox" value="Good Road Connectivity" checked class="accent-brandBlue"><span>Good Road Connectivity</span></label>
+                <label class="flex items-center gap-2 p-2 rounded-xl border border-stoneBorder bg-[#FAF8F5] cursor-pointer hover:border-brandBlue"><input type="checkbox" value="Rental Income Potential" class="accent-brandBlue"><span>Rental Income</span></label>
+                <label class="flex items-center gap-2 p-2 rounded-xl border border-stoneBorder bg-[#FAF8F5] cursor-pointer hover:border-brandBlue"><input type="checkbox" value="Investment Potential" class="accent-brandBlue"><span>Investment Potential</span></label>
+                <label class="flex items-center gap-2 p-2 rounded-xl border border-stoneBorder bg-[#FAF8F5] cursor-pointer hover:border-brandBlue"><input type="checkbox" value="Ready to Move" class="accent-brandBlue"><span>Ready to Move</span></label>
+                <label class="flex items-center gap-2 p-2 rounded-xl border border-stoneBorder bg-[#FAF8F5] cursor-pointer hover:border-brandBlue"><input type="checkbox" value="Under Construction" class="accent-brandBlue"><span>Under Construction</span></label>
+                <label class="flex items-center gap-2 p-2 rounded-xl border border-stoneBorder bg-[#FAF8F5] cursor-pointer hover:border-brandBlue"><input type="checkbox" value="Other" class="accent-brandBlue"><span>Other</span></label>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold uppercase text-textDark mb-1">Additional Requirements</label>
+              <textarea rows="3" placeholder="Tell us anything else you need (Example: East-facing, 2 parking spaces, close to school, preferably a corner property...)" class="w-full bg-[#FAF8F5] border border-stoneBorder rounded-xl p-3 text-xs text-textDark placeholder-gray-400 focus:outline-none focus:border-brandBlue resize-none"></textarea>
+            </div>
+          </div>
+
+          <!-- SECTION 6: WHEN ARE YOU PLANNING TO BUY? -->
+          <div class="space-y-4">
+            <div class="flex items-center gap-2 border-b border-stoneBorder pb-2">
+              <span class="w-6 h-6 rounded-full bg-brandBlue text-white text-xs font-bold flex items-center justify-center font-mono">6</span>
+              <h3 class="font-italiana font-bold text-xl text-textDark">When Are You Planning to Buy?</h3>
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold uppercase text-textDark mb-2">Your Buying Timeline*</label>
+              <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5 text-xs font-medium text-textDark">
+                <label class="p-2.5 rounded-xl border border-stoneBorder bg-[#FAF8F5] cursor-pointer flex items-center gap-2 hover:border-brandBlue"><input type="radio" name="timeline" value="Immediately" class="accent-brandBlue"><span>Immediately</span></label>
+                <label class="p-2.5 rounded-xl border border-stoneBorder bg-[#FAF8F5] cursor-pointer flex items-center gap-2 hover:border-brandBlue"><input type="radio" name="timeline" value="Within 1 Month" checked class="accent-brandBlue"><span>Within 1 Month</span></label>
+                <label class="p-2.5 rounded-xl border border-stoneBorder bg-[#FAF8F5] cursor-pointer flex items-center gap-2 hover:border-brandBlue"><input type="radio" name="timeline" value="1–3 Months" class="accent-brandBlue"><span>1–3 Months</span></label>
+                <label class="p-2.5 rounded-xl border border-stoneBorder bg-[#FAF8F5] cursor-pointer flex items-center gap-2 hover:border-brandBlue"><input type="radio" name="timeline" value="3–6 Months" class="accent-brandBlue"><span>3–6 Months</span></label>
+                <label class="p-2.5 rounded-xl border border-stoneBorder bg-[#FAF8F5] cursor-pointer flex items-center gap-2 hover:border-brandBlue"><input type="radio" name="timeline" value="6–12 Months" class="accent-brandBlue"><span>6–12 Months</span></label>
+                <label class="p-2.5 rounded-xl border border-stoneBorder bg-[#FAF8F5] cursor-pointer flex items-center gap-2 hover:border-brandBlue"><input type="radio" name="timeline" value="Just Exploring" class="accent-brandBlue"><span>Just Exploring</span></label>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold uppercase text-textDark mb-2">Why are you looking for this property?</label>
+              <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5 text-xs font-medium text-textDark">
+                <label class="p-2 rounded-xl border border-stoneBorder bg-[#FAF8F5] cursor-pointer flex items-center gap-2 hover:border-brandBlue"><input type="radio" name="purposeReason" value="Own Residence" checked class="accent-brandBlue"><span>Own Residence</span></label>
+                <label class="p-2 rounded-xl border border-stoneBorder bg-[#FAF8F5] cursor-pointer flex items-center gap-2 hover:border-brandBlue"><input type="radio" name="purposeReason" value="Investment" class="accent-brandBlue"><span>Investment</span></label>
+                <label class="p-2 rounded-xl border border-stoneBorder bg-[#FAF8F5] cursor-pointer flex items-center gap-2 hover:border-brandBlue"><input type="radio" name="purposeReason" value="Business" class="accent-brandBlue"><span>Business</span></label>
+                <label class="p-2 rounded-xl border border-stoneBorder bg-[#FAF8F5] cursor-pointer flex items-center gap-2 hover:border-brandBlue"><input type="radio" name="purposeReason" value="Rental Income" class="accent-brandBlue"><span>Rental Income</span></label>
+                <label class="p-2 rounded-xl border border-stoneBorder bg-[#FAF8F5] cursor-pointer flex items-center gap-2 hover:border-brandBlue"><input type="radio" name="purposeReason" value="Family Requirement" class="accent-brandBlue"><span>Family Requirement</span></label>
+                <label class="p-2 rounded-xl border border-stoneBorder bg-[#FAF8F5] cursor-pointer flex items-center gap-2 hover:border-brandBlue"><input type="radio" name="purposeReason" value="Other" class="accent-brandBlue"><span>Other</span></label>
+              </div>
+            </div>
+          </div>
+
+          <!-- FINAL CONFIRMATION & SUBMIT -->
+          <div class="p-6 rounded-3xl bg-[#FAF8F5] border border-stoneBorder space-y-4">
+            <h4 class="font-italiana font-bold text-xl text-textDark">Almost Done!</h4>
+            <p class="text-xs text-textMuted leading-relaxed">
+              Our team will review your requirements and search for properties matching your preferences.
+            </p>
+
+            <div>
+              <label class="block text-xs font-bold uppercase text-textDark mb-2">How would you like to receive property options?</label>
+              <div class="flex flex-wrap gap-4 text-xs font-medium text-textDark">
+                <label class="inline-flex items-center gap-2 cursor-pointer"><input type="radio" name="receiveOption" value="WhatsApp" checked class="accent-brandBlue"><span>WhatsApp</span></label>
+                <label class="inline-flex items-center gap-2 cursor-pointer"><input type="radio" name="receiveOption" value="Phone Call" class="accent-brandBlue"><span>Phone Call</span></label>
+                <label class="inline-flex items-center gap-2 cursor-pointer"><input type="radio" name="receiveOption" value="Email" class="accent-brandBlue"><span>Email</span></label>
+              </div>
+            </div>
+
+            <div class="pt-2">
+              <label class="flex items-start gap-2.5 cursor-pointer text-xs text-textDark">
+                <input type="checkbox" required class="accent-brandBlue mt-0.5">
+                <span>I agree to be contacted by Own My Property regarding my property request.</span>
+              </label>
+            </div>
+
+            <button type="submit" id="huntSubmitBtn" class="w-full bg-brandBlue hover:bg-blue-700 text-white font-bold text-xs uppercase py-4 rounded-2xl tracking-wider transition-all shadow-lg shadow-brandBlue/20 flex items-center justify-center gap-2">
+              <span>START MY PROPERTY HUNT</span>
+              <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            </button>
+          </div>
+
+        </form>
+
+        <!-- SUBMISSION SUCCESS CARD (Dynamically Shown) -->
+        <div id="huntSuccessState" class="hidden text-center py-10 px-4 space-y-6 animate-fade-in">
+          <div class="w-16 h-16 bg-emerald-100 text-brandGreen rounded-full flex items-center justify-center mx-auto shadow-sm">
+            <i data-lucide="check-check" class="w-8 h-8"></i>
+          </div>
+
+          <div>
+            <h3 class="font-italiana font-bold text-3xl text-textDark">Your Property Hunt Request Has Been Received</h3>
+            <p class="text-xs text-textMuted max-w-md mx-auto mt-2 leading-relaxed">
+              Our team will review your requirements and start searching for suitable properties immediately.
+            </p>
+          </div>
+
+          <div class="inline-block p-4 rounded-2xl bg-[#FAF8F5] border border-stoneBorder">
+            <span class="text-[10px] text-textMuted uppercase font-bold tracking-wider block">Official Tracking Code</span>
+            <span id="generatedRequestId" class="font-mono font-bold text-brandBlue text-xl tracking-wider">OMP-489210</span>
+          </div>
+
+          <p class="text-xs text-brandGreen font-medium">
+            You will receive updates through your selected contact method.
+          </p>
+
+          <div>
+            <button onclick="closeHuntModal()" class="bg-textDark hover:bg-black text-white text-xs font-bold uppercase px-6 py-3 rounded-xl transition-colors">
+              Back to Portal
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ================= MODAL: INSPECTION APPOINTMENT ================= -->
+  <div id="inspectionModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="glass-card max-w-md w-full p-6 sm:p-8 rounded-3xl border border-stoneBorder shadow-2xl relative">
+      <button onclick="closeInspectionModal()" class="absolute top-4 right-4 text-textMuted hover:text-textDark">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+      <div class="text-brandBlue text-xs font-bold uppercase tracking-widest">Shielded Site Walkthrough</div>
+      <h3 id="modalPropertyTitle" class="font-italiana font-bold text-2xl text-textDark mt-1">Property Inspection</h3>
+      <p class="text-xs text-textMuted mt-2">Enter your contact details to schedule an executive-guided walkthrough. Your details remain confidential.</p>
+      
+      <form onsubmit="confirmInspection(event)" class="mt-5 space-y-3">
+        <input type="text" required placeholder="Your Full Name" class="w-full bg-[#FAF8F5] border border-stoneBorder rounded-xl px-4 py-3 text-xs text-textDark placeholder-gray-400 focus:outline-none focus:border-brandBlue">
+        <input type="text" required placeholder="WhatsApp Number" class="w-full bg-[#FAF8F5] border border-stoneBorder rounded-xl px-4 py-3 text-xs text-textDark placeholder-gray-400 focus:outline-none focus:border-brandBlue">
+        <input type="date" required class="w-full bg-[#FAF8F5] border border-stoneBorder rounded-xl px-4 py-3 text-xs text-textDark focus:outline-none focus:border-brandBlue">
+        <button type="submit" class="w-full bg-brandBlue hover:bg-blue-700 text-white font-bold text-xs uppercase py-3.5 rounded-xl tracking-wider transition-colors shadow-md mt-2">
+          Confirm Inspection Schedule
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ================= FOOTER ================= -->
+  <footer class="border-t border-stoneBorder py-12 bg-white">
+    <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-6">
+      <div class="flex items-center gap-3">
+        <span class="font-italiana font-bold text-textDark text-lg">Own My ProperT</span>
+        <span class="text-xs text-textMuted">© 2026. DISYGO DIGITAL SOLUTIONSS.</span>
+      </div>
+      <div class="flex gap-6 text-xs font-bold text-textMuted">
+        <a href="javascript:switchTab('home')" class="hover:text-brandBlue transition-colors">Home</a>
+        <a href="javascript:switchTab('properties')" class="hover:text-brandBlue transition-colors">Properties</a>
+      </div>
+      <div class="text-xs text-brandGreen font-mono font-semibold">
+        Platform Online • Shield Active
+      </div>
+    </div>
+  </footer>
+
+  <!-- ================= LOGIC ENGINE (VANILLA JAVASCRIPT) ================= -->
+  <script>
+    // Initialize Lucide Icons
+    lucide.createIcons();
+
+    // State Variables
+    let currentCurrency = 'INR';
+
+    // Properties Data
+    const propertiesData = [
+      {
+        id: 1,
+        title: "The Serene Courtyard Villa",
+        type: "villa",
+        location: "Karakambadi Road, Tirupati",
+        inr: "₹ 1.45 Cr",
+        usd: "$ 174,000",
+        tag: "TUDA Approved",
+        specs: "4BHK Duplex • 3,200 sq.ft • East",
+        img: "https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=800&q=80"
+      },
+      {
+        id: 2,
+        title: "Aura Sky Residencies",
+        type: "apartment",
+        location: "Chandragiri Bypass, Tirupati",
+        inr: "₹ 78.5 Lakhs",
+        usd: "$ 94,200",
+        tag: "RERA Certified",
+        specs: "3BHK Suite • 1,850 sq.ft • North",
+        img: "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=800&q=80"
+      },
+      {
+        id: 3,
+        title: "Vedic Greens Gated Plots",
+        type: "plot",
+        location: "Renigunta Airport Road",
+        inr: "₹ 34.0 Lakhs",
+        usd: "$ 40,800",
+        tag: "TUDA LP #48/2024",
+        specs: "240 sq.yds • 40ft Roads • Clear Title",
+        img: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=800&q=80"
+      },
+      {
+        id: 4,
+        title: "The Hillside Cantilever",
+        type: "villa",
+        location: "Alipiri Foothills",
+        inr: "₹ 2.80 Cr",
+        usd: "$ 336,000",
+        tag: "Architectural Exclusive",
+        specs: "5BHK Mansion • 4,800 sq.ft • North-East",
+        img: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80"
+      },
+      {
+        id: 5,
+        title: "Emerald Heights High-Rise",
+        type: "apartment",
+        location: "MR Palle, Tirupati",
+        inr: "₹ 62.0 Lakhs",
+        usd: "$ 74,400",
+        tag: "Bank APF Sanctioned",
+        specs: "2BHK Luxury • 1,320 sq.ft • East",
+        img: "https://images.unsplash.com/photo-1567496898669-ee935f5f647a?auto=format&fit=crop&w=800&q=80"
+      },
+      {
+        id: 6,
+        title: "Royal Palms Township Plots",
+        type: "plot",
+        location: "Karakambadi Highway",
+        inr: "₹ 48.0 Lakhs",
+        usd: "$ 57,600",
+        tag: "TUDA Sanctioned",
+        specs: "300 sq.yds • Gated Layout • Bank Loan",
+        img: "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80"
+      }
+    ];
+
+    
+    // Tab Switching Functionality (Home, Properties)
+    // Replace switchTab in index.html with this safe version:
+    function switchTab(tabId) {
+      // 1. Hide all panels safely
+      document.querySelectorAll('.view-panel').forEach(el => {
+        el.classList.add('hidden');
+      });
+      
+      // 2. Show only the active panel if it exists
+      const activePanel = document.getElementById(`view-${tabId}`);
+      if (activePanel) {
+        activePanel.classList.remove('hidden');
+      }
+
+      // 3. Reset all nav buttons safely
+      document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.classList.remove('bg-textDark', 'text-white', 'shadow-md');
+        btn.classList.add('text-textMuted');
+      });
+
+      // 4. Highlight the active nav button if it exists
+      const activeBtn = document.getElementById(`nav-${tabId}`);
+      if (activeBtn) {
+        activeBtn.classList.remove('text-textMuted');
+        activeBtn.classList.add('bg-textDark', 'text-white', 'shadow-md');
+      }
+
+      if (typeof recordPageView === 'function') {
+        recordPageView(tabId);
+      }
+      
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+
+      if (tabId === 'properties' && typeof renderPropertiesCatalog === 'function') {
+        renderPropertiesCatalog('all');
+      }
+      
+      if (window.lucide) {
+        lucide.createIcons();
+      }
+    }
+    // Currency Switcher (INR)
+   // Replace createPropertyCardHTML with this:
+function createPropertyCardHTML(p) {
+  return `
+    <div class="tilt-card glass-card rounded-3xl overflow-hidden group flex flex-col justify-between shadow-sm" onmousemove="handleTilt(event, this)" onmouseleave="resetTilt(this)">
+      <div>
+        <div class="relative h-60 overflow-hidden bg-gray-100">
+          <img src="${p.image_url || p.img}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out">
+          <span class="absolute top-4 left-4 bg-brandBlue text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase shadow-sm">${p.tag}</span>
+          <span class="absolute top-4 right-4 bg-white/90 backdrop-blur-md text-textDark text-[11px] font-mono font-semibold px-2.5 py-1 rounded-lg border border-stoneBorder">Verified</span>
+        </div>
+        <div class="p-5">
+          <div class="text-xs text-brandGreen font-bold">${p.location}</div>
+          <h3 class="font-italiana font-bold text-xl text-textDark mt-1 group-hover:text-brandBlue transition-colors">${p.title}</h3>
+          <p class="text-xs text-textMuted mt-2 leading-relaxed font-mono">${p.specs}</p>
+        </div>
+      </div>
+      <div class="p-5 pt-0 flex items-center justify-between border-t border-stoneBorder mt-4">
+        <div>
+          <div class="text-[10px] text-textMuted uppercase font-bold tracking-wider">Price (INR)</div>
+          <div class="font-italiana font-bold text-lg text-textDark">${p.price_inr}</div>
+        </div>
+        <button onclick="requestInspection('${p.title.replace(/'/g, "\\'")}')" class="bg-[#EFECE6] hover:bg-brandBlue hover:text-white text-textDark text-xs font-bold px-4 py-2 rounded-xl transition-colors">
+          Inspect
+        </button>
+      </div>
+    </div>
+  `;
+}
+  // Add these functions inside the <script> tag of index.html
+  // 1. SUPABASE CLIENT INITIALIZATION (Must be at the very top)
+const SUPABASE_URL = "https://jmjmtbgtqnynohkmvfqn.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imptam10Ymd0cW55bm9oa212ZnFuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAyNDI3MzUsImV4cCI6MjEwNTgxODczNX0.zpbfLr8-7YNkShj_jMmFQXaTNmMS7a-UcDyg_RFoYsY";
+
+var db = null;
+if (window.supabase) {
+  try {
+    db = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  } catch (err) {
+    console.warn("Supabase init error:", err);
+  }
+}
+function openSellModal() {
+  document.getElementById('sellModal').classList.remove('hidden');
+  document.getElementById('sellPropertyForm').classList.remove('hidden');
+  document.getElementById('sellSuccessState').classList.add('hidden');
+}
+
+function closeSellModal() {
+  document.getElementById('sellModal').classList.add('hidden');
+}
+
+async function handleSellFormSubmit(e) {
+  e.preventDefault();
+  const btn = document.getElementById('sellerSubmitBtn');
+  btn.innerHTML = `<span class="inline-block animate-spin mr-2">⟳</span> Submitting for Audit...`;
+
+  const sellerPayload = {
+    request_id: 'SELL-' + Math.floor(100000 + Math.random() * 900000),
+    full_name: document.getElementById('seller_name').value,
+    mobile: document.getElementById('seller_phone').value,
+    property_purpose: 'Sell Request (' + document.getElementById('seller_prop_type').value + ')',
+    preferred_areas: document.getElementById('seller_location').value,
+    budget_range: document.getElementById('seller_price').value,
+    additional_notes: `Extent: ${document.getElementById('seller_size').value} | Facing: ${document.getElementById('seller_facing').value} | Approval: ${document.getElementById('seller_sanction').value} | Notes: ${document.getElementById('seller_notes').value}`,
+    buying_timeline: 'Seller Submission',
+    is_unlocked: true // Directly accessible by admin
+  };
+
+  if (db) {
+    try {
+      await db.from('client_leads').insert([sellerPayload]);
+    } catch (err) {
+      console.warn("DB insert error:", err);
+    }
+  }
+
+  document.getElementById('sellPropertyForm').classList.add('hidden');
+  document.getElementById('sellSuccessState').classList.remove('hidden');
+  lucide.createIcons();
+}
+
+    // 3D Perspective Card Tilt on Mouse Movement
+    function handleTilt(e, card) {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+      
+      const rotateX = ((y - centerY) / centerY) * -6;
+      const rotateY = ((x - centerX) / centerX) * 6;
+
+      card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.015, 1.015, 1.015)`;
+    }
+
+    function resetTilt(card) {
+      card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
+    }
+
+    // Property Hunt Modal Controls
+    function openHuntModal() {
+      document.getElementById('huntModal').classList.remove('hidden');
+      document.getElementById('propertyHuntForm').classList.remove('hidden');
+      document.getElementById('huntSuccessState').classList.add('hidden');
+    }
+
+    function closeHuntModal() {
+      document.getElementById('huntModal').classList.add('hidden');
+    }
+
+    // Handle Hunt Form Submission
+    function handleHuntFormSubmit(e) {
+      e.preventDefault();
+      const btn = document.getElementById('huntSubmitBtn');
+      btn.innerHTML = `<span class="inline-block animate-spin mr-2">⟳</span> Connecting Hunt Team...`;
+
+      setTimeout(() => {
+        // Generate random 6-digit Request ID: OMP-XXXXXX
+        const randomCode = Math.floor(100000 + Math.random() * 900000);
+        document.getElementById('generatedRequestId').innerText = 'OMP-' + randomCode;
+
+        document.getElementById('propertyHuntForm').classList.add('hidden');
+        document.getElementById('huntSuccessState').classList.remove('hidden');
+        lucide.createIcons();
+      }, 1000);
+    }
+
+    // Render Properties Catalog
+    function renderPropertiesCatalog(filter) {
+      const container = document.getElementById('propertiesCatalogGrid');
+      const filtered = filter === 'all' ? propertiesData : propertiesData.filter(p => p.type === filter);
+      
+      container.innerHTML = filtered.map(p => `
+        <div class="tilt-card glass-card rounded-3xl overflow-hidden group flex flex-col justify-between shadow-sm" onmousemove="handleTilt(event, this)" onmouseleave="resetTilt(this)">
+          <div>
+            <div class="relative h-56 overflow-hidden bg-gray-100">
+              <img src="${p.img}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+              <span class="absolute top-4 left-4 bg-brandBlue text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase shadow-sm">${p.tag}</span>
+            </div>
+            <div class="p-5">
+              <div class="text-xs text-brandGreen font-bold">${p.location}</div>
+              <h3 class="font-italiana font-bold text-xl text-textDark mt-1 group-hover:text-brandBlue transition-colors">${p.title}</h3>
+              <p class="text-xs text-textMuted mt-2 font-mono">${p.specs}</p>
+            </div>
+          </div>
+          <div class="p-5 pt-0 flex items-center justify-between border-t border-stoneBorder mt-4">
+            <div>
+              <div class="text-[10px] text-textMuted uppercase font-bold">Sanctioned Price</div>
+              <div class="font-italiana font-bold text-lg text-textDark price-inr">${p.inr}</div>
+              <div class="font-italiana font-bold text-lg text-textDark price-usd hidden">${p.usd}</div>
+            </div>
+            <button onclick="requestInspection('${p.title}')" class="bg-[#EFECE6] hover:bg-brandBlue hover:text-white text-textDark text-xs font-bold px-4 py-2 rounded-xl transition-colors">
+              Schedule Visit
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // Filter Property Buttons
+    function filterProperties(category, btn) {
+      document.querySelectorAll('.prop-filter-btn').forEach(b => {
+        b.classList.remove('bg-textDark', 'text-white', 'shadow-sm');
+        b.classList.add('bg-white', 'text-textMuted');
+      });
+      btn.classList.remove('bg-white', 'text-textMuted');
+      btn.classList.add('bg-textDark', 'text-white', 'shadow-sm');
+      renderPropertiesCatalog(category);
+    }
+
+    
+
+    // Modal Inspection Triggers
+    function requestInspection(propertyName) {
+      document.getElementById('modalPropertyTitle').innerText = propertyName;
+      document.getElementById('inspectionModal').classList.remove('hidden');
+    }
+
+    function closeInspectionModal() {
+      document.getElementById('inspectionModal').classList.add('hidden');
+    }
+
+    function confirmInspection(e) {
+      e.preventDefault();
+      alert("Inspection appointment confirmed! Our executive will connect via WhatsApp with your gate pass.");
+      closeInspectionModal();
+    }
+    // ================= ZERO-GAP SPLIT & OVERLAY CONTROLLER =================
+    // ================= ZERO-GAP SPLIT & PAUSE CONTROLLER =================
+    (function initSeamlessWhiteCurtain() {
+      const runway = document.getElementById('heroScrollRunway');
+      const doorLeft = document.getElementById('doorLeft');
+      const doorRight = document.getElementById('doorRight');
+      const entranceBadge = document.getElementById('entranceBadge');
+      const contentOverlay = document.getElementById('heroContentOverlay');
+      const heroImg = document.getElementById('heroCurtainImg');
+      const heroDimmer = document.getElementById('heroDimmer');
+
+      if (!runway || !doorLeft || !doorRight || !contentOverlay) return;
+
+      let isLocked = false;
+      let hasLockedOnce = false;
+
+      function onScrollUpdate() {
+        const rect = runway.getBoundingClientRect();
+        const runwayTrack = runway.offsetHeight - window.innerHeight;
+        
+        let progress = -rect.top / runwayTrack;
+        progress = Math.min(Math.max(progress, 0), 1);
+
+        // 1. Sliding Panels (Zero gap at progress 0, opening fully outward)
+        const doorOffset = progress * 102;
+        doorLeft.style.transform = `translateX(-${doorOffset}%)`;
+        doorRight.style.transform = `translateX(${doorOffset}%)`;
+
+        // 2. Fade out entrance logo badge
+        if (entranceBadge) {
+          const badgeOpacity = Math.max(0, 1 - (progress * 2.8));
+          entranceBadge.style.opacity = `${badgeOpacity}`;
+          entranceBadge.style.transform = `translate(-50%, -50%) scale(${1 - progress * 0.2})`;
+        }
+
+        // 3. Parallax subtle zoom on background image
+        if (heroImg) {
+          const imgScale = 1.06 - (progress * 0.06);
+          heroImg.style.transform = `scale(${imgScale})`;
+        }
+
+        // 4. Background Dimmer & Content Overlay
+        if (progress > 0.48) {
+          const fadeProgress = (progress - 0.48) / 0.52;
+          if (heroDimmer) heroDimmer.style.opacity = `${fadeProgress * 1.0}`;
+          contentOverlay.classList.add('content-active');
+        } else {
+          if (heroDimmer) heroDimmer.style.opacity = '0';
+          contentOverlay.classList.remove('content-active');
+        }
+
+        // 5. 1-SECOND SETTLED PAUSE LOCK
+        // Triggers once right when the card is fully revealed (progress between 0.85 and 0.98)
+        if (progress >= 0.10 && progress < 0.0 && !hasLockedOnce && !isLocked) {
+          isLocked = true;
+          hasLockedOnce = true;
+
+          // Lock scroll position at the revealed card
+          const lockPosition = runway.offsetTop + (runwayTrack * 0.92);
+          window.scrollTo({ top: lockPosition, behavior: 'instant' });
+
+          // Temporarily freeze wheel & touch for exactly 1 second
+          document.body.style.overflow = 'hidden';
+
+          setTimeout(() => {
+            document.body.style.overflow = '';
+            isLocked = false;
+          }, 1000); // 1000ms = 0.2 second pause
+        }
+
+        // Reset the lock trigger if user scrolls all the way back up
+        if (progress < 0.15) {
+          hasLockedOnce = false;
+        }
+      }
+
+      window.addEventListener('scroll', onScrollUpdate, { passive: true });
+      window.addEventListener('resize', onScrollUpdate, { passive: true });
+      onScrollUpdate();
+    })();
+  </script>
+  <!-- Portfolio Motion Engine -->
+  <script>
+    (function () {
+      if (window.__ompPortfolio || !window.gsap) return;
+      window.__ompPortfolio = true;
+      if (window.ScrollTrigger) gsap.registerPlugin(ScrollTrigger);
+
+      const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const fine = matchMedia('(hover:hover) and (pointer:fine)').matches && !reduced;
+      const mobile = matchMedia('(max-width:767px)').matches;
+
+      /* ---------- CSS: hover expansion, recede, mobile swipe ---------- */
+      const css = document.createElement('style');
+      css.textContent = `
+      .gallery-grid .tilt-card{transition:transform .22s cubic-bezier(.2,.8,.2,1),box-shadow .4s,border-color .3s,opacity .6s,filter .6s}
+      .gallery-grid .tilt-card img{transition:transform 1s cubic-bezier(.16,1,.3,1)}
+      .gallery-grid .tilt-card:hover{box-shadow:0 40px 70px -20px rgba(15,82,186,.22)}
+      .gallery-grid .tilt-card:hover img{transform:scale(1.08)}
+      .gallery-grid:has(.tilt-card:hover) .tilt-card:not(:hover){opacity:.6;filter:saturate(.7)}
+      @media(min-width:1024px){
+        .gallery-grid.grid{grid-template-columns:repeat(4,1fr);transition:grid-template-columns .85s cubic-bezier(.16,1,.3,1)}
+        .gallery-grid.grid:has(.tilt-card:nth-child(1):hover){grid-template-columns:1.7fr 1fr 1fr 1fr}
+        .gallery-grid.grid:has(.tilt-card:nth-child(2):hover){grid-template-columns:1fr 1.7fr 1fr 1fr}
+        .gallery-grid.grid:has(.tilt-card:nth-child(3):hover){grid-template-columns:1fr 1fr 1.7fr 1fr}
+        .gallery-grid.grid:has(.tilt-card:nth-child(4):hover){grid-template-columns:1fr 1fr 1fr 1.7fr}
+      }
+      @media(max-width:767px){
+        .gallery-grid.grid{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:1rem;padding-bottom:1rem;-webkit-overflow-scrolling:touch}
+        .gallery-grid .tilt-card{flex:0 0 82%;scroll-snap-align:center}
+      }
+      @media(prefers-reduced-motion:reduce){.gallery-grid,.gallery-grid *{transition-duration:.01ms!important}}
+      `;
+      document.head.appendChild(css);
+
+      /* ---------- Entrance: heading mask, then cards rise in 3D, images settle ---------- */
+      function play(grid, withHeading) {
+        const cards = [...grid.querySelectorAll('.tilt-card')];
+        if (!cards.length) return;
+        const imgs = cards.map(c => c.querySelector('img')).filter(Boolean);
+        const sec = grid.closest('section');
+        const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+
+        if (withHeading && sec) {
+          const h = sec.querySelector('h2');
+          if (h) tl.fromTo(h, { clipPath: 'inset(0 0 100% 0)', y: 36 },
+            { clipPath: 'inset(0 0 0% 0)', y: 0, duration: 1.2, ease: 'power4.out', clearProps: 'clipPath,transform' }, 0);
+        }
+        tl.fromTo(cards,
+          mobile ? { x: 60, opacity: 0 } : { y: 90, opacity: 0, rotateX: 14, transformPerspective: 1200 },
+          { x: 0, y: 0, rotateX: 0, opacity: 1, duration: 1.3, stagger: 0.14,
+            clearProps: 'transform,opacity' }, withHeading ? 0.25 : 0)
+          .fromTo(imgs, { scale: 1.25 },
+            { scale: 1, duration: 1.8, stagger: 0.14, clearProps: 'transform' }, withHeading ? 0.25 : 0);
+      }
+
+      function setup(grid, withHeading) {
+        if (!grid || reduced || !window.ScrollTrigger) return;
+        let armed = false;
+        const arm = () => {
+          const cards = grid.querySelectorAll('.tilt-card');
+          if (!cards.length || armed) return;
+          armed = true;
+          gsap.set(cards, { opacity: 0 });
+          if (grid.getBoundingClientRect().top < innerHeight * 0.85 && grid.offsetParent) play(grid, withHeading);
+          else ScrollTrigger.create({ trigger: grid, start: 'top 85%', once: true, onEnter: () => play(grid, withHeading) });
+        };
+        arm();
+        new MutationObserver(() => { armed = false; arm(); }).observe(grid, { childList: true });
+      }
+
+      const home = document.querySelector('.perspective-container');
+      if (home) { home.classList.add('gallery-grid'); setup(home, true); }
+      setup(document.getElementById('propertiesCatalogGrid'), false);
+
+      addEventListener('load', () => window.ScrollTrigger && ScrollTrigger.refresh());
+    })();
+  </script>
+</body>
+</html>
