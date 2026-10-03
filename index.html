@@ -138,7 +138,7 @@
     /* Background Image Container */
     .hero-bg-visual {
       position: absolute;
-      inset: 0;
+      inset: -60 ;
       z-index: 1;
       overflow: hidden;
     }
@@ -166,8 +166,8 @@
    /* Semi-transparent frosted stone curtain doors showing background image */
     .split-curtain-door {
       position: absolute;
-      top: 0;
-      bottom: 0;
+      top: 0 ;
+      bottom: 0 ;
       width: 50.05vw;
       background: rgba(250, 248, 245, 0.72); /* 72% light stone tint so the image shows through clearly */
       backdrop-filter: blur(14px); /* Luxurious frosted glass blur */
@@ -584,25 +584,30 @@
       }
 
       /* Horizontal Scroll Container: Side-peek with snap */
-      .features-rail-wrapper {
-        width: 100% !important;
-        overflow-x: auto !important;
-        overflow-y: hidden !important;
-        scroll-snap-type: x mandatory;
-        -webkit-overflow-scrolling: touch;
-        scroll-behavior: smooth;
-        padding: 0 1.25rem !important;
-        /* Hide native ugly scrollbar completely */
-        scrollbar-width: none !important;
-        -ms-overflow-style: none !important;
-      }
+     .features-rail-wrapper {
+      width: 100% !important;
+      overflow-x: auto !important;
+      overflow-y: hidden !important;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      scroll-behavior: smooth;
+      /* Completely hides browser default scrollbar while keeping scrolling active */
+      scrollbar-width: none !important;
+      -ms-overflow-style: none !important;
+    }
 
-      .features-rail-wrapper::-webkit-scrollbar {
-        display: none !important;
-        width: 0 !important;
-        height: 0 !important;
-      }
+    .features-rail-wrapper::-webkit-scrollbar {
+      display: none !important;
+      width: 0 !important;
+      height: 0 !important;
+    }
 
+    /* Completely hide pill indicator wrappers */
+    .mobile-pill-track-wrapper,
+    .mobile-pill-track,
+    .mobile-pill-thumb {
+      display: none !important;
+    }
       .features-cards-rail {
         display: flex !important;
         transform: none !important;
@@ -660,6 +665,182 @@
       }
     }
 
+   /* ================= PC CINEMATIC SPLIT HERO (DESKTOP >= 768px) ================= */
+    @media (min-width: 768px) {
+      .reveal-hero-section {
+        height: 280vh !important;
+        position: relative !important;
+        background: #FAF8F5;
+      }
+
+      .reveal-sticky-box {
+        position: sticky !important;
+        top: 0 !important;
+        height: 100vh !important;
+        width: 100% !important;
+        overflow: hidden !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        background: #FAF8F5 !important;
+      }
+
+      .hero-bg-visual {
+  display: block !important;
+  position: absolute !important;
+  inset: 0 0 -60px 0 !important;
+  width: 100% !important;
+  height: calc(100% + 60px) !important;
+  z-index: 1 !important;
+}
+
+      .hero-bg-visual img {
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: cover !important;
+        transform: scale(1.06);
+        will-change: transform;
+      }
+    
+      /* ================= FROSTED WHITE ARCHITECTURAL BLUR SCRIM ================= */
+    .hero-visual-dimmer {
+      position: absolute;
+      inset: 0;
+      /* Soft white frosted wash instead of dark tint */
+      background: linear-gradient(
+        180deg, 
+        rgba(250, 248, 245, 0.55)
+        rgba(250, 248, 245, 0.72)
+        rgba(250, 248, 245, 0.82)
+      ) !important;
+      backdrop-filter: blur(8px) saturate(1.2) !important;
+      -webkit-backdrop-filter: blur(8px) saturate(1.2) !important;
+      z-index: 2;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+      pointer-events: none;
+    }
+      /* The two parting white doors */
+      .split-curtain-door {
+        display: flex !important;
+        position: absolute !important;
+        top: 0 !important;
+        bottom: 0 !important;
+        width: 50.05vw !important;
+        background: #FAF8F5 !important;
+        z-index: 10 !important;
+        align-items: center !important;
+        will-change: transform;
+        user-select: none;
+      }
+
+      .door-left {
+        left: 0 !important;
+        justify-content: flex-end !important;
+      }
+
+      .door-right {
+        right: 0 !important;
+        justify-content: flex-start !important;
+      }
+
+      .split-word-left, .split-word-right {
+        font-family: 'Italiana', serif !important;
+        font-size: clamp(3.2rem, 9.5vw, 10.5rem) !important;
+        font-weight: 800 !important;
+        color: #0F52BA !important;
+        letter-spacing: -0.03em !important;
+        line-height: 1 !important;
+        white-space: nowrap !important;
+      }
+
+      .split-word-left { margin-right: 0.12em !important; }
+      .split-word-right { margin-left: 0.12em !important; }
+
+      .entrance-logo-badge {
+        display: flex !important;
+        position: absolute !important;
+        top: calc(50% - 130px) !important;
+        left: 50% !important;
+        transform: translate(-50%, -50%) !important;
+        z-index: 15 !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        pointer-events: none !important;
+      }
+
+      .hero-meta-tag {
+        display: flex !important;
+        position: absolute !important;
+        font-size: 10px !important;
+        font-weight: 700 !important;
+        letter-spacing: 0.16em !important;
+        text-transform: uppercase !important;
+        color: #12151A !important;
+        opacity: 0.65 !important;
+        z-index: 30 !important;
+        pointer-events: none !important;
+      }
+
+      /* Desktop Form Overlay */
+      #heroContentOverlay {
+        position: absolute !important;
+        inset: 0 !important;
+        z-index: 25 !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+        padding: 1.5rem !important;
+        opacity: 0 !important;
+        transform: scale(0.96) !important;
+        transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), transform 0.5s cubic-bezier(0.16, 1, 0.3, 1) !important;
+        pointer-events: none !important;
+      }
+
+      #heroContentOverlay.content-active {
+        opacity: 1 !important;
+        transform: scale(1) !important;
+        pointer-events: auto !important;
+      }
+
+     #heroContentOverlay h1 {
+        color: #f2f4f7 !important;
+        text-shadow: 0 4px 20px rgba(15, 82, 186, 0.25), 0 1px 3px rgba(0, 0, 0, 0.5) !important;
+      }
+
+      #heroContentOverlay .font-playfair {
+        color: #0F52BA !important;
+        text-shadow: 0 2px 10px rgba(22, 163, 74, 0.2) !important;
+      }
+    }
+
+    /* ================= MOBILE STRICT OVERRIDE (< 768px ONLY) ================= */
+    @media (max-width: 767px) {
+      .reveal-hero-section {
+        height: auto !important;
+        min-height: auto !important;
+        padding-top: 5rem !important;
+        padding-bottom: 2rem !important;
+      }
+      .reveal-sticky-box {
+        position: relative !important;
+        height: auto !important;
+        display: flex !important;
+        flex-direction: column !important;
+      }
+      .split-curtain-door,
+      .entrance-logo-badge,
+      .hero-meta-tag {
+        display: none !important;
+      }
+      #heroContentOverlay {
+        position: relative !important;
+        opacity: 1 !important;
+        transform: none !important;
+        pointer-events: auto !important;
+      }
+    }
   </style>
 </head>
 <body class="relative selection:bg-brandBlue selection:text-white">
@@ -670,7 +851,7 @@
 
   <!-- ================= TOP NAVIGATION (STRICTLY 3 NAV LINKS) ================= -->
   <!-- ================= RESPONSIVE TOP NAVIGATION ================= -->
-  <header class="fixed top-0 left-0 right-0 z-40 bg-white/85 sm:bg-transparent backdrop-blur-md border-b border-stoneBorder/60 transition-all duration-300">
+  <header class="fixed top-0 left-0 right-0 z-40 bg-white/90 sm:bg-transparent backdrop-blur-md border-b border-stoneBorder/60 transition-all duration-300">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 h-16 sm:h-20 flex items-center justify-between gap-2">
       
       <!-- Brand Logo & Identity -->
@@ -776,7 +957,7 @@
 
   
   <!-- ================= VIEW 1: HOME PAGE ================= -->
-  <main id="view-home" class="view-panel block pt-28 pb-20">
+  <main id="view-home" class="view-panel block pt-0 sm:pt-28 pb-20">
     
     <!-- ================= CINEMATIC SPLIT REVEAL HERO ================= -->
     <!-- ================= BRAND WHITE SEAMLESS SPLIT HERO ================= -->
@@ -784,12 +965,16 @@
     <section class="reveal-hero-section" id="heroScrollRunway">
       <div class="reveal-sticky-box">
         
-        <!-- Entrance Logo Badge (Positioned at Entrance) -->
-        <div class="entrance-logo-badge" id="entranceBadge">
-          <div class="w-14 h-14 rounded-2xl bg-brandBlue text-white font-italiana font-bold text-2xl flex items-center justify-center shadow-lg shadow-brandBlue/25 border border-white/20">
-            <img src="https://scontent.cdninstagram.com/v/t51.82787-19/802333309_18113565055820501_4586330556296927883_n.jpg?stp=dst-jpg_s150x150_tt6&_nc_cat=110&ccb=7-5&_nc_sid=f7ccc5&efg=eyJ2ZW5jb2RlX3RhZyI6InByb2ZpbGVfcGljLnd3dy4xMDgwLkMzIn0%3D&_nc_ohc=z9IUbsAmhRgQ7kNvwG5YGJd&_nc_oc=AdpxJuD8ciXu3q0ATT1TecsuVPHK82bV_qxJ6ONpbjy1qq8uMG20mRlpF9PzMtUhHl2YUm1dzIj7AT28Akj9uwxc&_nc_zt=24&_nc_ht=scontent.cdninstagram.com&_nc_gid=qvdPfIeaQETgah3fZAkyPQ&_nc_ss=7b689&oh=00_AQLUs83yN1lcvIvvANXHzvcP8siTsuiC--KIUPaqC1tQzQ&oe=6AB5C5D7" class="h- w-12 rounded-xl object-cover transform group-hover:scale-105 transition-transform duration-300 border border-stoneBorder">
-          </div>
-        </div>
+        <!-- Entrance Logo Badge with your actual brand logo -->
+<div class="entrance-logo-badge" id="entranceBadge">
+  <div class="w-16 h-16 rounded-2xl bg-white p-2 border border-stoneBorder shadow-xl shadow-brandBlue/20 flex items-center justify-center transform transition-transform duration-300">
+    <img 
+      src="https://scontent.cdninstagram.com/v/t51.82787-19/802333309_18113565055820501_4586330556296927883_n.jpg?stp=dst-jpg_s150x150_tt6&_nc_cat=110&ccb=7-5&_nc_sid=f7ccc5&efg=eyJ2ZW5jb2RlX3RhZyI6InByb2ZpbGVfcGljLnd3dy4xMDgwLkMzIn0%3D&_nc_ohc=z9IUbsAmhRgQ7kNvwG5YGJd&_nc_oc=AdpxJuD8ciXu3q0ATT1TecsuVPHK82bV_qxJ6ONpbjy1qq8uMG20mRlpF9PzMtUhHl2YUm1dzIj7AT28Akj9uwxc&_nc_zt=24&_nc_ht=scontent.cdninstagram.com&_nc_gid=qvdPfIeaQETgah3fZAkyPQ&_nc_ss=7b689&oh=00_AQLUs83yN1lcvIvvANXHzvcP8siTsuiC--KIUPaqC1tQzQ&oe=6AB5C5D7" 
+      alt="Own My ProperT Brand Logo" 
+      class="w-full h-full object-contain rounded-xl"
+    >
+  </div>
+</div>
 
         <!-- Top Editorial Meta -->
         <div class="hero-meta-tag top-8 left-8 sm:left-12 flex items-center gap-2">
@@ -816,83 +1001,65 @@
           <div class="split-word-right">PROPERT</div>
         </div>
 
-        <!-- COMPLETE IMAGE 2 OVERLAY (Directly over the background image) -->
+        <!-- Desktop Overlay (reveals once doors open) -->
         <div id="heroContentOverlay" class="max-w-3xl w-full mx-auto text-center">
-          
-         <!-- Header Text Above the Card -->
-        <div class="text-center z-20 max-w-2xl px-4 mb-4">
-          <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white text-[10px] font-bold uppercase tracking-widest mb-3">
-            <span class="w-1.5 h-1.5 rounded-full bg-brandGreen animate-pulse"></span>
-            Zero Spam • Dedicated Hunters • 100% Real-Time
+          <div class="w-full flex flex-col items-center justify-center text-center px-4 mb-4">
+            <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/10 backdrop-blur-md border border-brandBlue/20 text-white text-[10px] font-bold uppercase tracking-widest mb-3">
+              <span class="w-1.5 h-1.5 rounded-full bg-brandGreen animate-pulse"></span>
+              Zero Spam • Dedicated Hunters • 100% Real-Time
+            </div>
+            <h1 class="font-italiana text-center text-white font-extrabold tracking-tight whitespace-nowrap text-3xl sm:text-5xl md:text-6xl drop-shadow-[0_1px_px_rgba(0,0,0,0.8)]">
+              PRECISION OVER NOISE
+            </h1>
+            <div class="font-playfair italic text-2xl sm:text-4xl text-white mt-1 font-semibold drop-shadow-[0_px_10px_rgba(0,0,0,0.8)]">
+              Sourced for the few
+            </div>
           </div>
-         <!-- Centered Single-Line Header -->
-<div class="w-full flex flex-col items-center justify-center text-center px-4">
-  
- 
 
-  <!-- Headline: Strictly 1 Line & Centered on Desktop & Mobile -->
-  <h1 class="font-italiana text-center text-white font-extrabold tracking-tight whitespace-nowrap text-3xl sm:text-5xl md:text-6xl lg:text-7xl drop-shadow-[0_2px_14px_rgba(0,0,0,0.8)]">
-    PRECISION OVER NOISE
-  </h1>
-
-</div>
-          
-          <!-- Brand Blue Script Italic -->
-          <div class="font-merchant text-2xl sm:text-4xl text-white mt-1 font-regular drop-shadow-[0_2px_10px_rgba(0,0,0,0.6)]">
-            Sourced for the few
-          </div>
-          
-          <!-- Brightened Subtitle -->
-          <p class="text-xs sm:text-sm text-stone-200 mt-3 max-w-lg mx-auto leading-relaxed drop-shadow-[0_1px_6px_rgba(0,0,0,0.8)]">
-            <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white text-[10px] font-bold uppercase tracking-widest mb-3">
-            Tirupati's flagship PropTech portal. Our dedicated property-hunting team evaluates off-market and verified listings with zero cold calls from unauthorized middlemen.
-          </p>
-        </div>
-
-          <!-- Image 2 Floating Concierge Form Card -->
+          <!-- Concierge Card -->
           <div class="bg-white/95 backdrop-blur-xl border border-stoneBorder rounded-3xl p-6 sm:p-8 shadow-2xl space-y-4 max-w-2xl mx-auto w-full">
             <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 border border-blue-200 text-brandBlue text-[11px] font-bold tracking-wider uppercase">
               <i data-lucide="compass" class="w-3.5 h-3.5"></i>
               Personalized Concierge Service
             </div>
-
-            <h2 class="font-italiana font-bold text-2xl sm:text-3xl text-textDark">
+            <h2 class="font-italiana font-bold text-1xl sm:text-2xl text-textDark">
               Tell Us What Property You're Looking For
             </h2>
-
             <p class="text-xs text-textMuted max-w-md mx-auto leading-relaxed">
-              You don't need to go road-to-road searching for properties. Share your requirements with us, and our property-hunting team will search for suitable properties and present the best available options for you to choose from.
+              You don't need to go road-to-road searching for properties. Share your requirements with us, and our team will present the best verified options.
             </p>
-
             <div class="pt-2 flex flex-col sm:flex-row items-center justify-center gap-4">
               <button onclick="openHuntModal()" class="w-full sm:w-auto bg-brandBlue hover:bg-blue-700 text-white font-bold text-xs uppercase px-8 py-3.5 rounded-full transition-all shadow-md shadow-brandBlue/20 flex items-center justify-center gap-2 transform hover:scale-[1.02]">
                 <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
                 <span>Start My Property Hunt</span>
               </button>
-              
               <div class="flex items-center gap-1.5 text-xs text-textMuted font-semibold">
                 <i data-lucide="shield-check" class="w-4 h-4 text-brandGreen"></i>
                 <span>Zero-Spam Identity Shield Active</span>
               </div>
             </div>
           </div>
-
         </div>
 
-        <!-- Bottom Directional Meta -->
+        <!-- Meta Indicators -->
         <div class="hero-meta-tag bottom-8 left-8 sm:left-12 flex items-center gap-2">
           <i data-lucide="arrow-down" class="w-3.5 h-3.5 text-brandBlue animate-bounce"></i>
+          <p class="text-xs text-white max-w-md mx-auto leading-relaxed">
           Scroll Down to Open
+          </p>
         </div>
         <div class="hero-meta-tag bottom-8 right-8 sm:right-12">
+           <p class="text-xs text-white max-w-md mx-auto leading-relaxed">
           Verified Direct Listings Only
+          </p>
         </div>
 
       </div>
     </section>
 
     <!-- SECTION 2: TOP 4 PREMIER PROPERTIES -->
-    <section class="max-w-7xl mx-auto px-6 py-20 border-t border-stoneBorder">
+    <!-- AFTER: Compact on mobile, spacious on desktop -->
+  <section class="max-w-7xl mx-auto px-6 pt-6 sm:pt-20 pb-16 sm:pb-20 border-t-0 sm:border-t border-stoneBorder">
       <div class="flex flex-col md:flex-row md:items-end justify-between mb-12">
         <div>
           <span class="text-brandBlue text-xs font-bold uppercase tracking-widest">Handpicked Portfolio</span>
@@ -1149,6 +1316,7 @@
           <div class="mobile-pill-track">
             <div id="mobilePillThumb" class="mobile-pill-thumb"></div>
           </div>
+          
         </div>
           <div id="featuresCardsTrack" class="features-cards-rail flex gap-6 items-stretch">
             
@@ -2301,7 +2469,10 @@ async function handleSellFormSubmit(e) {
     }
     // ================= ZERO-GAP SPLIT & OVERLAY CONTROLLER =================
     // ================= ZERO-GAP SPLIT & PAUSE CONTROLLER =================
+    
     (function initSeamlessWhiteCurtain() {
+      // 1. Instantly exit on mobile & small tablets so touch scroll is 100% smooth & free
+      if (window.innerWidth < 768) return;
       const runway = document.getElementById('heroScrollRunway');
       const doorLeft = document.getElementById('doorLeft');
       const doorRight = document.getElementById('doorRight');
@@ -2309,12 +2480,13 @@ async function handleSellFormSubmit(e) {
       const contentOverlay = document.getElementById('heroContentOverlay');
       const heroImg = document.getElementById('heroCurtainImg');
       const heroDimmer = document.getElementById('heroDimmer');
-
+      
+      
       if (!runway || !doorLeft || !doorRight || !contentOverlay) return;
 
       let isLocked = false;
       let hasLockedOnce = false;
-
+      
       function onScrollUpdate() {
         const rect = runway.getBoundingClientRect();
         const runwayTrack = runway.offsetHeight - window.innerHeight;
@@ -2384,7 +2556,8 @@ async function handleSellFormSubmit(e) {
   <!-- Portfolio Motion Engine -->
   <script>
     (function () {
-      if (window.__ompPortfolio || !window.gsap) return;
+      // Completely disable touch-trapping card animations on mobile
+      if (window.innerWidth < 768) return;
       window.__ompPortfolio = true;
       if (window.ScrollTrigger) gsap.registerPlugin(ScrollTrigger);
 
