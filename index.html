@@ -818,10 +818,13 @@
     /* ================= MOBILE STRICT OVERRIDE (< 768px ONLY) ================= */
     @media (max-width: 767px) {
       .reveal-hero-section {
-        height: auto !important;
-        min-height: auto !important;
-        padding-top: 5rem !important;
-        padding-bottom: 2rem !important;
+         height: auto  !important;
+         min-height: auto !important;
+         padding-top: 4rem !important;
+         padding-bottom: rem !important; /* Extends the section downward */
+         position: relative !important;
+         overflow: hidden !important;
+         background: #FAF8F5 !important;
       }
       .reveal-sticky-box {
         position: relative !important;
