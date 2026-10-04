@@ -8,6 +8,9 @@
  <!-- Tailwind CSS & Lucide Icons CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Leaflet GIS Map Engine -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <!-- Supabase JS Client for Realtime Database -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -816,7 +819,7 @@
     }
 
     /* ================= MOBILE STRICT OVERRIDE (< 768px ONLY) ================= */
-  @media (max-width: 767px) {
+    @media (max-width: 767px) {
       .reveal-hero-section {
          height: auto  !important;
          min-height: auto !important;
@@ -844,6 +847,220 @@
         pointer-events: auto !important;
       }
     }
+
+    /* ================= GEOSPATIAL GIS MAP SECTION ================= */
+    #omp-gis-map {
+      width: 100%;
+      height: 520px;
+      border-radius: 1.75rem;
+      z-index: 10;
+    }
+
+    @media (max-width: 767px) {
+      #omp-gis-map {
+        height: 420px;
+        border-radius: 1.25rem;
+      }
+    }
+
+    /* Custom Leaflet Map Pin Markers */
+    .custom-gis-pin {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .gis-pin-bubble {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 10px;
+      border-radius: 9999px;
+      font-size: 11px;
+      font-weight: 800;
+      color: #ffffff;
+      white-space: nowrap;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45);
+      border: 1.5px solid rgba(255, 255, 255, 0.9);
+      transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .gis-pin-bubble:hover {
+      transform: scale(1.12);
+    }
+
+    .gis-pin-green { background: #16A34A; }
+    .gis-pin-blue  { background: #0F52BA; }
+    .gis-pin-amber { background: #D97706; }
+    .gis-pin-red   { background: #DC2626; }
+
+    /* Custom Satellite Map Popup Card */
+    .leaflet-popup-content-wrapper {
+      padding: 0 !important;
+      border-radius: 1.25rem !important;
+      overflow: hidden !important;
+      box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.35) !important;
+      border: 1px solid #E7E2DA;
+    }
+
+    .leaflet-popup-content {
+      margin: 0 !important;
+      line-height: 1.4 !important;
+    }
+
+    .leaflet-container a.leaflet-popup-close-button {
+      top: 10px !important;
+      right: 10px !important;
+      color: #FFFFFF !important;
+      background: rgba(18, 20, 23, 0.7);
+      border-radius: 999px;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+  /* ================= PLOTSVIEW-STYLE GIS MAP ================= */
+    #omp-gis-map {
+      width: 100%;
+      height: 580px;
+      z-index: 10;
+      background: #111;
+    }
+
+    @media (max-width: 767px) {
+      #omp-gis-map {
+        height: 440px;
+      }
+    }
+
+    /* PlotsView-style Glowing Marker Pins */
+    .plotsview-pin-container {
+      position: relative;
+      cursor: pointer;
+    }
+
+    .plotsview-marker-dot {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid #ffffff;
+      box-shadow: 0 0 10px rgba(0,0,0,0.6);
+      transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .plotsview-marker-dot svg {
+      width: 12px;
+      height: 12px;
+      fill: #ffffff;
+    }
+
+    .plotsview-pin-container:hover .plotsview-marker-dot {
+      transform: scale(1.25);
+    }
+
+    /* Colors matching Plotsview categories */
+    .pin-dtcp-green { background: #16A34A; box-shadow: 0 0 12px rgba(22, 163, 74, 0.7); }
+    .pin-villa-blue { background: #0F52BA; box-shadow: 0 0 12px rgba(15, 82, 186, 0.7); }
+    .pin-red-hot    { background: #E11D48; box-shadow: 0 0 12px rgba(225, 29, 72, 0.7); }
+    .pin-yellow-inv { background: #EAB308; box-shadow: 0 0 12px rgba(234, 179, 8, 0.7); }
+
+    /* PlotsView Floating White Tag on Pin */
+    .plotsview-price-tag {
+      position: absolute;
+      bottom: 26px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #ffffff;
+      color: #12151a;
+      padding: 4px 8px;
+      border-radius: 8px;
+      font-size: 11px;
+      font-weight: 700;
+      white-space: nowrap;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.35);
+      border: 1px solid #E5E7EB;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      line-height: 1.1;
+      pointer-events: none;
+    }
+
+    .plotsview-price-tag::after {
+      content: '';
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      border-width: 5px;
+      border-style: solid;
+      border-color: #ffffff transparent transparent transparent;
+    }
+
+    .plotsview-price-tag .pv-name {
+      font-size: 10px;
+      font-weight: 800;
+      color: #111827;
+    }
+
+    .plotsview-price-tag .pv-rate {
+      font-size: 9px;
+      font-weight: 600;
+      color: #16A34A;
+    }
+
+    /* Popup detail card */
+    .leaflet-popup-content-wrapper {
+      padding: 0 !important;
+      border-radius: 18px !important;
+      overflow: hidden !important;
+      border: 1px solid #E7E5E0;
+    }
+    .leaflet-popup-content {
+      margin: 0 !important;
+    }
+  /* ================= SATELLITE / STREET TOGGLE (HIGH CONTRAST) ================= */
+    .map-layer-container {
+      display: inline-flex;
+      align-items: center;
+      background: #FFFFFF !important;
+      border: 1px solid #D1D5DB !important;
+      border-radius: 0.75rem !important;
+      padding: 3px !important;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15) !important;
+    }
+
+    /* Active Selected Button: Solid Brand Blue with Crisp White Text */
+    .map-toggle-btn.active {
+      background-color: #0F52BA !important; /* Brand Blue */
+      color: #FFFFFF !important;            /* Pure readable white */
+      font-weight: 700 !important;
+      border-radius: 0.5rem !important;
+      box-shadow: 0 2px 6px rgba(15, 82, 186, 0.35) !important;
+    }
+
+    /* Inactive Unselected Button: Dark Slate Gray Text on White (Fully Legible) */
+    .map-toggle-btn.inactive {
+      background-color: transparent !important;
+      color: #1F2937 !important;            /* Dark Charcoal Grey */
+      font-weight: 600 !important;
+      border-radius: 0.5rem !important;
+    }
+
+    .map-toggle-btn.inactive:hover {
+      background-color: #F3F4F6 !important;
+      color: #0F52BA !important;            /* Brand Blue on hover */
+    }
+    
+    
   </style>
 </head>
 <body class="relative selection:bg-brandBlue selection:text-white">
@@ -1057,6 +1274,76 @@
           </p>
         </div>
 
+      </div>
+    </section>
+
+    <!-- ================= GEOSPATIAL MAP SECTION (PLOTSVIEW STYLE) ================= -->
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 pt-10 pb-6 relative z-20">
+      
+      <!-- Top Title and Filter Row -->
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-4">
+        <div>
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-[10px] font-extrabold uppercase tracking-widest mb-1.5">
+            <span class="w-1.5 h-1.5 rounded-full bg-brandGreen animate-pulse"></span>
+            Geospatial Satellite Inventory
+          </div>
+          <h2 class="editorial-title text-2xl sm:text-4xl font-bold text-textDark">
+            Verified Ventures <span class="text-brandBlue font-playfair italic font-normal">Tirupati Master Map</span>
+          </h2>
+          <p class="text-xs sm:text-sm text-textMuted max-w-xl mt-0.5">
+            Real-time satellite coordinates showing sanctioned ventures, Ring Road corridors, and live price/sq.yd benchmarks.
+          </p>
+        </div>
+
+        <!-- Filter Pills like Plotsview -->
+        <div class="flex items-center gap-1.5 overflow-x-auto pb-1 text-xs font-bold">
+          <button onclick="filterPvPins('all')" id="pv-btn-all" class="pv-filter-btn px-4 py-1.5 rounded-full bg-brandBlue text-white shadow-xs">
+            All (7)
+          </button>
+          <button onclick="filterPvPins('plots')" id="pv-btn-plots" class="pv-filter-btn px-4 py-1.5 rounded-full bg-brandBlue text-white border border-stoneBorder hover:bg-stoneSoft">
+            DTCP Plots
+          </button>
+          <button onclick="filterPvPins('villas')" id="pv-btn-villas" class="pv-filter-btn px-4 py-1.5 rounded-full bg-brandBlue text-white border border-stoneBorder hover:bg-stoneSoft">
+            Gated Villas
+          </button>
+          <button onclick="filterPvPins('apartments')" id="pv-btn-apartments" class="pv-filter-btn px-4 py-1.5 rounded-full bg-brandBlue text-white border border-stoneBorder hover:bg-stoneSoft">
+            Apartments
+          </button>
+        </div>
+      </div>
+
+     <!-- Map Viewport Wrapper -->
+      <div class="relative overflow-hidden rounded-3xl border border-stoneBorder shadow-xl bg-stone-900">
+        <!-- Leaflet Container -->
+        <div id="omp-gis-map"></div>
+
+        <!-- Corridor View / Recenter Button (Top Right) -->
+        <button onclick="resetTirupatiView()" class="absolute top-3 sm:top-4 right-3 sm:right-4 z-[500] bg-white/95 hover:bg-white text-textDark px-3 py-1.5 rounded-xl border border-stoneBorder shadow-md text-[11px] sm:text-xs font-bold flex items-center gap-1.5 transition-transform active:scale-95">
+          <i data-lucide="compass" class="w-3.5 h-3.5 text-brandBlue"></i>
+          <span>Corridor View</span>
+        </button>
+
+        <!-- SATELLITE & STREET TOGGLE: Positioned cleanly at BOTTOM-RIGHT -->
+        <div class="absolute bottom-3 sm:bottom-4 right-3 sm:right-4 z-[500] flex bg-brandBlue/95 backdrop-blur-md p-1 rounded-xl border border-stoneBorder shadow-lg">
+          <button onclick="setMapLayer('satellite')" id="btnLayerSat" class="px-2.5 py-1 text-[10px] sm:text-xs font-bold rounded-lg bg-brandDark text-white transition-all">
+            Satellite
+          </button>
+          <button onclick="setMapLayer('streets')" id="btnLayerStr" class="px-2.5 py-1 text-[10px] sm:text-xs font-bold rounded-lg bg-white text-brandBlue hover:bg-stoneSoft transition-all">
+            Street
+          </button>
+        </div>
+
+        <!-- COMPACT BOTTOM-LEFT LEGEND (Does not block the map) -->
+        <div class="absolute bottom-3 sm:bottom-4 left-3 sm:left-4 z-[500] pointer-events-none">
+          <div class="pointer-events-auto bg-stone-900/90 backdrop-blur-md text-white px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl sm:rounded-2xl border border-white/15 shadow-xl flex items-center gap-2 sm:gap-4 text-[9px] sm:text-[10px] font-bold">
+            <span class="flex items-center gap-1"><span class="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-brandGreen"></span> DTCP/TUDA</span>
+            <span class="flex items-center gap-1"><span class="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-brandBlue"></span> Villas</span>
+            <span class="hidden sm:flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-rose-500"></span> Hot</span>
+          </div>
+        </div>
+        <div class="tilt-card ..." data-property-id="3">
+  <!-- Card contents for The Hillside Cantilever -->
+</div>
       </div>
     </section>
 
@@ -2744,6 +3031,405 @@ async function handleSellFormSubmit(e) {
       if (window.lucide) lucide.createIcons();
     }
     
+    // ================= GIS SATELLITE MAP ENGINE (PLOTSVIEW STYLE) =================
+    let gisMapInstance = null;
+    let mapMarkerLayerGroup = null;
+
+    // Verified Projects Dataset across Tirupati Corridors
+    const verifiedMapProjects = [
+      {
+        id: 1,
+        title: "The Hillside Cantilever",
+        category: "villas",
+        type: "Luxury 4BHK Villa",
+        price: "₹ 2.80 Cr",
+        unitPrice: "₹ 5,833 / sq.ft",
+        location: "Alipiri Foothills Belt, Tirupati",
+        lat: 13.6520,
+        lng: 79.4010,
+        pinColor: "gis-pin-blue",
+        approval: "TUDA Sanctioned",
+        img: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=600&q=80"
+      },
+      {
+        id: 2,
+        title: "Srivari Emerald Meadows",
+        category: "plots",
+        type: "DTCP Gated Plot Layout",
+        price: "₹ 28.5 Lakhs",
+        unitPrice: "₹ 15,800 / Ankanam",
+        location: "Renigunta Highway Corridor",
+        lat: 13.6385,
+        lng: 79.5120,
+        pinColor: "gis-pin-green",
+        approval: "DTCP LP No. 44/2024",
+        img: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=600&q=80"
+      },
+      {
+        id: 3,
+        title: "Aura Botanica Residences",
+        category: "apartments",
+        type: "Premium 3BHK Residence",
+        price: "₹ 78.5 Lakhs",
+        unitPrice: "₹ 4,243 / sq.ft",
+        location: "Chandragiri Bypass Road",
+        lat: 13.6015,
+        lng: 79.3350,
+        pinColor: "gis-pin-amber",
+        approval: "AP RERA Approved",
+        img: "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=600&q=80"
+      },
+      {
+        id: 4,
+        title: "Vaikuntam Golden Orchards",
+        category: "plots",
+        type: "Highway Facing Residential Plots",
+        price: "₹ 34.0 Lakhs",
+        unitPrice: "₹ 18,500 / Ankanam",
+        location: "Tirupati-Chennai Expressway, Karakambadi",
+        lat: 13.6750,
+        lng: 79.4750,
+        pinColor: "gis-pin-green",
+        approval: "TUDA Approved LP",
+        img: "https://images.unsplash.com/photo-1508873696983-2df5293cb395?auto=format&fit=crop&w=600&q=80"
+      },
+      {
+        id: 5,
+        title: "Skyline Panorama Heights",
+        category: "apartments",
+        type: "Smart 2 & 3BHK Towers",
+        price: "₹ 62.0 Lakhs",
+        unitPrice: "₹ 4,100 / sq.ft",
+        location: "RC Road, Central Tirupati",
+        lat: 13.6288,
+        lng: 79.4192,
+        pinColor: "gis-pin-blue",
+        approval: "Municipal Sanctioned",
+        img: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=600&q=80"
+      }
+    ];
+
+    // ================= PLOTSVIEW SATELLITE MAP ENGINE =================
+    let pvMap = null;
+    let pvMarkersGroup = null;
+    let satTileLayer = null;
+    let streetTileLayer = null;
+
+    // Verified Projects across Tirupati Core & Growth Belts
+    const pvProjects = [
+      {
+        id: 1,
+        name: "Akshita Natures Nest",
+        type: "plots",
+        rate: "₹ 18,000 / sq yd",
+        category: "DTCP Sanctioned",
+        lat: 13.6288,
+        lng: 79.4350,
+        colorClass: "pin-red-hot",
+        location: "Karakambadi Highway, Tirupati",
+        units: "150 - 400 sq.yds",
+        img: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=600&q=80"
+      },
+      {
+        id: 2,
+        name: "Srika Mahipolis",
+        type: "plots",
+        rate: "₹ 28,500 / sq yd",
+        category: "TUDA Approved LP",
+        lat: 13.6495,
+        lng: 79.4950,
+        colorClass: "pin-dtcp-green",
+        location: "Renigunta Airport Road",
+        units: "200 - 600 sq.yds",
+        img: "https://images.unsplash.com/photo-1541888946425-d0fbb186c5f7?auto=format&fit=crop&w=600&q=80"
+      },
+      {
+        id: 3,
+        name: "The Hillside Cantilever",
+        type: "villas",
+        rate: "₹ 2.80 Cr",
+        category: "Luxury 4BHK Villa",
+        lat: 13.6620,
+        lng: 79.3980,
+        colorClass: "pin-villa-blue",
+        location: "Alipiri Foothills Belt",
+        units: "4,800 sq.ft Built-up",
+        img: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=600&q=80"
+      },
+      {
+        id: 4,
+        name: "Aura Botanica Towers",
+        type: "apartments",
+        rate: "₹ 78.5 Lakhs",
+        category: "3BHK Gated Tower",
+        lat: 13.6120,
+        lng: 79.3450,
+        colorClass: "pin-yellow-inv",
+        location: "Chandragiri Bypass Corridor",
+        units: "1,850 sq.ft",
+        img: "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=600&q=80"
+      },
+      {
+        id: 5,
+        name: "Srivari Emerald Meadows",
+        type: "plots",
+        rate: "₹ 15,800 / sq yd",
+        category: "DTCP Approved",
+        lat: 13.5890,
+        lng: 79.4620,
+        colorClass: "pin-dtcp-green",
+        location: "Vadamalapeta Corridor",
+        units: "167 sq.yds Onwards",
+        img: "https://images.unsplash.com/photo-1508873696983-2df5293cb395?auto=format&fit=crop&w=600&q=80"
+      },
+      {
+        id: 6,
+        name: "Vaikuntam Golden Orchards",
+        type: "plots",
+        rate: "₹ 22,000 / sq yd",
+        category: "TUDA Sanctioned",
+        lat: 13.6820,
+        lng: 79.4410,
+        colorClass: "pin-dtcp-green",
+        location: "Mangalam Road Sector",
+        units: "Gated Layout",
+        img: "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=600&q=80"
+      },
+      {
+        id: 7,
+        name: "Skyline Panorama Heights",
+        type: "apartments",
+        rate: "₹ 62.0 Lakhs",
+        category: "Smart 2 & 3BHK",
+        lat: 13.6350,
+        lng: 79.4120,
+        colorClass: "pin-yellow-inv",
+        location: "RC Road, Tirupati",
+        units: "Ready for Possession",
+        img: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=600&q=80"
+      }
+    ];
+
+    function initPlotsViewMap() {
+      const container = document.getElementById('omp-gis-map');
+      if (!container || pvMap) return;
+
+      // 1. Initialize Map centered on Tirupati Urban Development Area
+      pvMap = L.map('omp-gis-map', {
+        center: [13.6350, 79.4300],
+        zoom: 12,
+        scrollWheelZoom: false, // Prevents interfering with page scrolling
+        attributionControl: false
+      });
+
+      // 2. High-Res Satellite Imagery (Esri World Imagery)
+      satTileLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+        maxZoom: 19
+      }).addTo(pvMap);
+
+      // Boundaries & Road Labels Overlay
+      L.tileLayer('https://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}', {
+        maxZoom: 19,
+        opacity: 0.85
+      }).addTo(pvMap);
+
+      // 3. Street Layer alternative
+      streetTileLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19
+      });
+
+      // 4. PlotsView Yellow & Green Corridor Growth Rings
+      // Inner Core Ring (Green)
+      L.circle([13.6350, 79.4300], {
+        color: '#16A34A',
+        weight: 2,
+        fillColor: '#16A34A',
+        fillOpacity: 0.05,
+        radius: 4500
+      }).addTo(pvMap);
+
+      // Outer Investment Ring (Yellow) like Plotsview reference
+      L.circle([13.6350, 79.4300], {
+        color: '#EAB308',
+        weight: 2.5,
+        dashArray: '6, 8',
+        fillColor: '#EAB308',
+        fillOpacity: 0.03,
+        radius: 9500
+      }).addTo(pvMap);
+
+      pvMarkersGroup = L.layerGroup().addTo(pvMap);
+      renderPvPins('all');
+
+      setTimeout(() => {
+        pvMap.invalidateSize();
+      }, 300);
+    }
+
+    // Render Pins with PlotsView style name+price floating tags
+    function renderPvPins(filter) {
+      if (!pvMarkersGroup) return;
+      pvMarkersGroup.clearLayers();
+
+      const filtered = filter === 'all' ? pvProjects : pvProjects.filter(p => p.type === filter);
+
+      filtered.forEach(p => {
+        const pinHtml = `
+          <div class="plotsview-pin-container">
+            <div class="plotsview-price-tag">
+              <span class="pv-name">${p.name}</span>
+              <span class="pv-rate">${p.rate}</span>
+            </div>
+            <div class="plotsview-marker-dot ${p.colorClass}">
+              <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+            </div>
+          </div>
+        `;
+
+        const icon = L.divIcon({
+          className: '',
+          html: pinHtml,
+          iconSize: [30, 42],
+          iconAnchor: [15, 30]
+        });
+
+        const marker = L.marker([p.lat, p.lng], { icon: icon });
+
+        // High-end property card popup on click
+        // High-end clickable property card popup
+        const popupHtml = `
+          <div class="w-[260px] bg-white overflow-hidden rounded-2xl select-none">
+            <!-- Clickable Property Image -->
+            <div 
+              onclick="navigateToProperty(${p.id})" 
+              class="h-28 w-full relative cursor-pointer group overflow-hidden" 
+              title="Click to view ${p.name} details"
+            >
+              <img 
+                src="${p.img}" 
+                alt="${p.name}" 
+                class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 ease-out"
+              >
+              <div class="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition-colors"></div>
+              <span class="absolute top-2 left-2 bg-brandDark/90 backdrop-blur-md text-white text-[9px] font-extrabold px-2 py-0.5 rounded-full uppercase tracking-wider">
+                ${p.category}
+              </span>
+              <span class="absolute bottom-2 right-2 bg-white/90 backdrop-blur-md text-brandDark text-[9px] font-bold px-2 py-0.5 rounded-md shadow-sm group-hover:bg-brandBlue group-hover:text-white transition-colors">
+                View Listing →
+              </span>
+            </div>
+
+            <!-- Card Body Content -->
+            <div class="p-3.5 space-y-1">
+              <h4 
+                onclick="navigateToProperty(${p.id})" 
+                class="font-bold text-sm text-textDark leading-tight cursor-pointer hover:text-brandBlue transition-colors"
+              >
+                ${p.name}
+              </h4>
+              <p class="text-[11px] text-textMuted flex items-center gap-1">📍 ${p.location}</p>
+              <div class="text-[10px] text-brandGreen font-bold">${p.units}</div>
+              
+              <div class="pt-2 border-t border-stoneBorder flex items-center justify-between mt-2">
+                <div>
+                  <div class="text-[8.5px] uppercase font-bold text-textMuted">Price Benchmark</div>
+                  <div class="text-sm font-extrabold text-brandDark">${p.rate}</div>
+                </div>
+                <!-- Inspect Button: Also redirects to listing -->
+                <button 
+                  type="button"
+                  onclick="navigateToProperty(${p.id})" 
+                  class="bg-brandBlue hover:bg-blue-700 active:scale-95 text-white text-[10px] font-bold px-3.5 py-1.5 rounded-xl transition-all shadow-sm flex items-center gap-1"
+                >
+                  <span>Inspect</span>
+                  <i data-lucide="arrow-up-right" class="w-3 h-3"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+
+        marker.bindPopup(popupHtml, { maxWidth: 280 });
+        pvMarkersGroup.addLayer(marker);
+      });
+    }
+
+    window.filterPvPins = function(category) {
+      document.querySelectorAll('.pv-filter-btn').forEach(btn => {
+        btn.classList.remove('bg-brandDark', 'text-white');
+        btn.classList.add('bg-white', 'text-textDark', 'border', 'border-stoneBorder');
+      });
+      const activeBtn = document.getElementById(`pv-btn-${category}`);
+      if (activeBtn) {
+        activeBtn.classList.remove('bg-white', 'text-textDark', 'border', 'border-stoneBorder');
+        activeBtn.classList.add('bg-brandDark', 'text-white');
+      }
+      renderPvPins(category);
+    };
+
+    window.setMapLayer = function(layerType) {
+      if (!pvMap) return;
+      if (layerType === 'satellite') {
+        pvMap.removeLayer(streetTileLayer);
+        pvMap.addLayer(satTileLayer);
+        document.getElementById('btnLayerSat').className = 'px-2.5 py-1 text-[11px] font-bold rounded-lg bg-brandDark text-white';
+        document.getElementById('btnLayerStr').className = 'px-2.5 py-1 text-[11px] font-bold rounded-lg bg-transparent text-textDark';
+      } else {
+        pvMap.removeLayer(satTileLayer);
+        pvMap.addLayer(streetTileLayer);
+        document.getElementById('btnLayerStr').className = 'px-2.5 py-1 text-[11px] font-bold rounded-lg bg-brandDark text-white';
+        document.getElementById('btnLayerSat').className = 'px-2.5 py-1 text-[11px] font-bold rounded-lg bg-transparent text-textDark';
+      }
+    };
+
+    window.resetTirupatiView = function() {
+      if (pvMap) pvMap.flyTo([13.6350, 79.4300], 12, { duration: 1 });
+    };
+
+    // Auto-init on page load
+    document.addEventListener('DOMContentLoaded', () => {
+      initPlotsViewMap();
+    });
+   // ================= MAP -> PROPERTY LISTING REDIRECTION =================
+    window.navigateToProperty = function(propertyId) {
+      // 1. If inside a Leaflet popup, close it smoothly
+      if (pvMap) {
+        pvMap.closePopup();
+      }
+
+      // 2. Switch from 'home' view to the 'properties' catalog view
+      if (typeof switchTab === 'function') {
+        switchTab('properties');
+      }
+
+      // 3. Locate the listing card in the DOM and scroll smoothly to it
+      setTimeout(() => {
+        // Target either data-property-id or property card element
+        const targetCard = document.querySelector(`[data-property-id="${propertyId}"]`) 
+          || document.getElementById(`property-card-${propertyId}`)
+          || document.querySelector(`.property-card:nth-child(${propertyId})`);
+
+        if (targetCard) {
+          targetCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          
+          // Subtle highlight glow to draw the user's eye to the exact card
+          targetCard.classList.add('ring-4', 'ring-brandBlue', 'ring-offset-2');
+          setTimeout(() => {
+            targetCard.classList.remove('ring-4', 'ring-brandBlue', 'ring-offset-2');
+          }, 2400);
+        } else {
+          // Fallback: If on the main catalog container, scroll to top of listings
+          const catalogGrid = document.getElementById('propertiesGrid') || document.getElementById('homeTopPropertiesGrid');
+          if (catalogGrid) {
+            catalogGrid.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        }
+
+        // Re-initialize Lucide icons if any dynamic icons rendered
+        if (window.lucide) lucide.createIcons();
+      }, 150);
+    };
+
   </script>
 </body>
 </html>
